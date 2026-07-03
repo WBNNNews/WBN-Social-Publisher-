@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<!--
+  WBN Social Publisher™ v0.2 — WBN Global Edition
+  Built on WBN Operating Platform™ v1.0
+  WBN Style Guide v3.2 · Cast OS™ v0.3
+  Infrastructure: Cloudflare Workers + Supabase
+  Ghost-ready: paste everything between GHOST FRAGMENT START
+  and GHOST FRAGMENT END into a Ghost HTML block.
+  © WBN News Corp Inc.™ All rights reserved.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WBN Social Publisher™ v0.2 — WBN Global</title>
+</head>
+<body style="margin:0;padding:24px;background:#ffffff;">
+<!-- GHOST FRAGMENT START -->
+<div id="spOS">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Source+Code+Pro:wght@400;500;600&display=swap');
+/* ============================================================
+   WBN OPERATING PLATFORM™ — DESIGN TOKENS
+   Style Guide v3.2 · All values locked. Do not modify.
+   Use --cast-hot and --cast-cold for cast accent colours only.
+============================================================ */
+#spOS {
+  --robin:       #59c2eb;
+  --robin-dark:  #1f8db8;
+  --robin-deep:  #1a7aaa;
+  --robin-dim:   #b7dfef;
+  --robin-faint: #eef9fe;
+  --robin-line:  #c8ecfb;
+  --bg1:         #dff5ff;
+  --bg2:         #c8ecfb;
+  --panel1:      #ffffff;
+  --panel2:      #eaf8fe;
+  --frost:       rgba(255,255,255,.58);
+  --text:        #123246;
+  --muted:       #426679;
+  --success:     #13795b;
+  --warning:     #9a6700;
+  --danger:      #a61b1b;
+  --success-bg:  #e8f7ee;
+  --warning-bg:  #fff5e8;
+  --danger-bg:   #fdf0f0;
+  --shadow:      0 10px 30px rgba(18,50,70,.08);
+  --cast-hot:    #1285c0;
+  --cast-hot-bg: #e6f4fb;
+  --cast-cold:   #0f5fa3;
+  --cast-cold-bg:#e0eef9;
+  --sponsor:     #204961;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  max-width: 1180px;
+  margin: 0 auto;
+  width: 100%;
+  line-height: 1.5;
+}
+#spOS * { box-sizing: border-box; }
+.os-shell { background:var(--panel1); border:1px solid var(--robin-dim); border-radius:24px; padding:24px; box-shadow:var(--shadow); }
+.os-header { background:var(--panel1); border:1px solid var(--robin-dim); border-radius:18px; padding:24px 28px 20px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+.os-wordmark { font-family:'Oswald',Arial,sans-serif; font-size:10px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--robin-dark); margin-bottom:6px; }
+.os-cast-name { font-family:'Oswald',Arial,sans-serif; font-size:30px; font-weight:700; color:var(--text); letter-spacing:.03em; margin:0; }
+.os-cast-tagline { font-size:13px; color:var(--muted); margin-top:8px; }
+.os-version-pill { background:var(--robin); color:#fff; border-radius:999px; padding:6px 16px; font-family:'Source Code Pro',monospace; font-size:12px; font-weight:700; white-space:nowrap; }
+.os-ticker { background:#fff; border:1px solid var(--robin-dim); border-radius:14px; padding:9px 14px; overflow:hidden; margin-bottom:14px; white-space:nowrap; }
+.os-ticker-inner { display:inline-block; padding-left:100%; animation:osTickerScroll 38s linear infinite; font-family:'Source Code Pro',monospace; font-size:12px; font-weight:700; color:var(--text); }
+.os-ticker-label { color:var(--robin-dark); margin-right:10px; }
+@keyframes osTickerScroll { 0%{transform:translateX(0);}100%{transform:translateX(-100%);} }
+.os-cloud-banner { display:none; background:var(--warning-bg); color:var(--warning); border:1px solid #e8d0a0; border-radius:12px; padding:8px 14px; font-size:12px; font-weight:700; margin-bottom:14px; }
+.os-cloud-banner.show { display:block; }
+.os-cast-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.os-cast-tab { padding:9px 18px; font-family:'Oswald',Arial,sans-serif; font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; border-radius:10px; border:1px solid var(--robin-dim); background:#fff; color:var(--muted); transition:.15s; }
+.os-cast-tab:hover { background:var(--robin-faint); color:var(--robin-dark); }
+.os-cast-tab.active { background:var(--robin); color:#fff; border-color:var(--robin-dark); }
+.os-section-panel { display:none; }
+.os-section-panel.active { display:block; }
+.os-panel { background:var(--panel1); border:2px solid var(--robin-dim); border-radius:18px; margin-bottom:14px; box-shadow:0 6px 18px rgba(18,50,70,.06); overflow:hidden; }
+.os-panel-header { background:var(--frost); border-bottom:1px solid var(--robin-dim); padding:14px 20px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+.os-panel-title { font-family:'Oswald',Arial,sans-serif; font-size:15px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text); margin:0; }
+.os-panel-sub { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--muted); }
+.os-panel-body { padding:18px 20px; }
+.os-metric-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:14px; margin-bottom:14px; }
+.os-metric-card { background:var(--panel1); border:1.5px solid var(--robin-dim); border-radius:16px; padding:16px; position:relative; overflow:hidden; box-shadow:0 4px 12px rgba(18,50,70,.06); }
+.os-metric-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; background:var(--robin); }
+.os-metric-card.m-success::before { background:var(--success); }
+.os-metric-card.m-warning::before { background:var(--warning); }
+.os-metric-card.m-danger::before  { background:var(--danger); }
+.os-metric-card.m-hot::before     { background:var(--cast-hot); }
+.os-metric-card.m-cold::before    { background:var(--cast-cold); }
+.os-metric-label { font-size:10px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; font-weight:700; letter-spacing:.06em; }
+.os-metric-value { font-size:26px; font-weight:800; color:var(--text); line-height:1; }
+.os-metric-value.hot  { color:var(--cast-hot); }
+.os-metric-value.cold { color:var(--cast-cold); }
+.os-metric-sub { margin-top:8px; font-size:11px; color:var(--muted); line-height:1.6; }
+.os-table-wrap { overflow-x:auto; }
+.os-table { width:100%; border-collapse:collapse; font-size:12px; line-height:1.4; }
+.os-table thead th { padding:8px 12px; text-align:left; background:var(--panel2); border-bottom:1.5px solid var(--robin-dim); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); white-space:nowrap; }
+.os-table tbody td { padding:10px 12px; border-bottom:1px solid var(--robin-line); color:var(--text); vertical-align:middle; }
+.os-table tbody tr:last-child td { border-bottom:none; }
+.os-table tbody tr:hover td { background:var(--robin-faint); }
+.os-badge { display:inline-flex; align-items:center; border-radius:999px; padding:3px 9px; font-size:10px; font-weight:700; text-transform:uppercase; border:1px solid var(--robin-dim); background:#fff; color:var(--muted); white-space:nowrap; font-family:'Source Code Pro',monospace; letter-spacing:.04em; }
+.os-badge.success { background:var(--success-bg); border-color:#a8dfc0; color:var(--success); }
+.os-badge.warning { background:var(--warning-bg); border-color:#e8d0a0; color:var(--warning); }
+.os-badge.danger  { background:var(--danger-bg);  border-color:#e8b0b0; color:var(--danger); }
+.os-badge.hot     { background:var(--cast-hot-bg); border-color:#8ecbe8; color:var(--cast-hot); }
+.os-badge.cold    { background:var(--cast-cold-bg); border-color:#8ab8e0; color:var(--cast-cold); }
+.os-btn { appearance:none; border:none; text-decoration:none; background:var(--robin); color:#fff; padding:10px 16px; border-radius:12px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:14px; font-weight:700; font-family:Arial,Helvetica,sans-serif; transition:.18s ease; }
+.os-btn:hover           { background:var(--robin-dark); }
+.os-btn.secondary       { background:var(--muted); }
+.os-btn.secondary:hover { background:#315265; }
+.os-btn.danger          { background:var(--danger); }
+.os-btn.danger:hover    { background:#7a1313; }
+.os-btn.success         { background:var(--success); }
+.os-btn.success:hover   { background:#0f5c45; }
+.os-btn.ghost           { background:#fff; color:var(--text); border:1px solid var(--robin-dim); }
+.os-btn.ghost:hover     { background:var(--robin-faint); }
+.os-btn.dark            { background:#123246; color:#fff; }
+.os-btn.dark:hover      { background:#0d2535; }
+.os-btn.small           { padding:7px 12px; font-size:12px; border-radius:10px; }
+.os-btn.sponsor-btn     { background:linear-gradient(180deg,#315b75,var(--sponsor)); color:#fff; border:1px solid #17384c; padding:7px 12px; font-size:12px; border-radius:10px; }
+.os-btn:disabled        { opacity:.42; cursor:not-allowed; }
+.os-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+.os-grid-card { background:var(--panel1); border:1.5px solid var(--robin-dim); border-radius:16px; padding:16px; }
+.os-grid-card-title { font-family:'Oswald',Arial,sans-serif; font-size:14px; font-weight:700; color:var(--robin-dark); letter-spacing:.04em; margin-bottom:8px; display:flex; justify-content:space-between; align-items:flex-start; gap:6px; }
+.os-grid-card-body { font-size:12px; color:var(--muted); line-height:1.7; }
+.os-grid-card-body strong { color:var(--text); }
+.os-grid-card-body code { font-family:'Source Code Pro',monospace; background:var(--robin-faint); padding:1px 5px; border-radius:4px; font-size:11px; color:var(--robin-dark); }
+.os-feed-why { background:var(--robin-faint); border-left:4px solid var(--robin); padding:12px; border-radius:0 10px 10px 0; font-size:12px; line-height:1.7; margin-bottom:14px; color:var(--text); }
+.os-feed-why strong { color:var(--robin-dark); }
+.os-sponsor-bar { background:var(--panel1); border:2px solid var(--robin-dim); border-radius:16px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+.os-sponsor-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-family:'Source Code Pro',monospace; }
+.os-admin-wrap { display:none; margin-bottom:14px; }
+.os-admin-wrap.open { display:block; }
+.os-admin-login-box { max-width:360px; }
+.os-admin-field { width:100%; padding:9px 12px; border:1px solid var(--robin-dim); border-radius:10px; font-size:13px; margin-bottom:12px; font-family:Arial,Helvetica,sans-serif; }
+.os-field-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:6px; display:block; }
+.os-field-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+.os-admin-tabs { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
+.os-admin-tab { padding:8px 14px; font-family:'Oswald',Arial,sans-serif; font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; cursor:pointer; border-radius:10px; border:1px solid var(--robin-dim); background:#fff; color:var(--muted); }
+.os-admin-tab.active { background:var(--robin); color:#fff; border-color:var(--robin-dark); }
+.os-admin-panel { display:none; }
+.os-admin-panel.active { display:block; }
+.os-role-pill { display:inline-flex; align-items:center; border-radius:999px; padding:4px 12px; font-size:11px; font-weight:700; text-transform:uppercase; font-family:'Source Code Pro',monospace; }
+.os-role-pill.super  { background:var(--danger-bg);  color:var(--danger);  border:1px solid #e8b0b0; }
+.os-role-pill.admin  { background:var(--warning-bg); color:var(--warning); border:1px solid #e8d0a0; }
+.os-role-pill.editor { background:var(--robin-faint); color:var(--robin-dark); border:1px solid var(--robin-dim); }
+.os-msg { font-size:12px; padding:8px 12px; border-radius:10px; margin-bottom:10px; display:none; }
+.os-msg.show { display:block; }
+.os-msg.ok  { background:var(--success-bg); color:var(--success); }
+.os-msg.err { background:var(--danger-bg);  color:var(--danger); }
+.os-danger-zone { border:1px dashed var(--danger); background:var(--danger-bg); border-radius:14px; padding:14px; margin-top:16px; }
+.os-danger-zone-title { color:var(--danger); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; }
+.os-footer-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; padding-top:12px; border-top:1px solid var(--robin-dim); }
+.os-footer-meta { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--muted); }
+.os-footer-right { display:flex; align-items:center; gap:10px; }
+.os-admin-toggle { background:#123246; color:#fff; border:none; border-radius:10px; padding:8px 14px; font-size:11px; font-weight:700; font-family:Arial,Helvetica,sans-serif; cursor:pointer; box-shadow:0 4px 10px rgba(18,50,70,.18); }
+.os-admin-toggle:hover { background:#0d2535; }
+/* ============================================================
+   SP — SOCIAL PUBLISHER™ v0.2 APP STYLES (namespaced sp-)
+============================================================ */
+.sp-two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media(max-width:820px){.sp-two-col{grid-template-columns:1fr;}}
+.sp-activity-row { display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border-radius:10px; }
+.sp-activity-row:hover { background:var(--robin-faint); }
+.sp-activity-icon { font-size:14px; flex-shrink:0; width:20px; text-align:center; margin-top:1px; }
+.sp-activity-desc { flex:1; font-size:12px; color:var(--text); line-height:1.4; }
+.sp-activity-handle { font-family:'Source Code Pro',monospace; font-size:10px; color:var(--robin-dark); }
+.sp-activity-time { font-family:'Source Code Pro',monospace; font-size:10px; color:var(--muted); white-space:nowrap; flex-shrink:0; }
+.sp-dash-acct-row { display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--robin-dim); border-radius:10px; background:var(--panel2); margin-bottom:7px; }
+.sp-mini-av { width:30px; height:30px; border-radius:50%; background:var(--cast-hot-bg); border:1.5px solid var(--cast-hot); display:flex; align-items:center; justify-content:center; font-family:'Oswald',Arial,sans-serif; font-size:13px; font-weight:700; color:var(--cast-hot); flex-shrink:0; }
+.sp-account-card { background:var(--panel1); border:1.5px solid var(--robin-dim); border-radius:16px; padding:16px 20px; display:flex; align-items:flex-start; gap:16px; transition:border-color .15s; margin-bottom:10px; }
+.sp-account-card:hover { border-color:var(--robin-dark); }
+.sp-account-card.connected { border-left:4px solid var(--success); }
+.sp-account-card.error     { border-left:4px solid var(--danger); }
+.sp-account-avatar { width:48px; height:48px; border-radius:50%; background:var(--cast-hot-bg); border:2px solid var(--cast-hot); display:flex; align-items:center; justify-content:center; font-family:'Oswald',Arial,sans-serif; font-size:20px; font-weight:700; color:var(--cast-hot); flex-shrink:0; }
+.sp-account-name { font-family:'Oswald',Arial,sans-serif; font-size:16px; font-weight:700; color:var(--text); letter-spacing:.03em; }
+.sp-account-handle { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--robin-dark); margin-bottom:5px; }
+.sp-account-meta-row { display:flex; gap:7px; flex-wrap:wrap; align-items:center; margin-top:5px; }
+.sp-account-actions { margin-left:auto; display:flex; gap:8px; flex-shrink:0; flex-direction:column; align-items:flex-end; }
+.sp-platform-chip { font-family:'Source Code Pro',monospace; font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:var(--cast-hot-bg); color:var(--cast-hot); border:1px solid #8ecbe8; padding:2px 8px; border-radius:999px; }
+/* Connect account form */
+.sp-connect-form { background:var(--panel2); border:1.5px solid var(--robin-dim); border-radius:14px; padding:18px; margin-bottom:14px; }
+.sp-connect-form-title { font-family:'Oswald',Arial,sans-serif; font-size:14px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--text); margin-bottom:14px; }
+/* Composer */
+.sp-composer-grid { display:grid; grid-template-columns:1fr 320px; gap:18px; align-items:start; }
+@media(max-width:900px){.sp-composer-grid{grid-template-columns:1fr;}}
+.sp-char-bar { display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-top:4px; }
+.sp-char-counter { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--muted); }
+.sp-char-counter.warn { color:var(--warning); font-weight:700; }
+.sp-char-counter.over { color:var(--danger);  font-weight:700; }
+.sp-composer-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; align-items:center; }
+/* Image upload */
+.sp-image-upload-zone { background:var(--panel2); border:1.5px dashed var(--robin-dim); border-radius:10px; padding:16px; margin-top:13px; cursor:pointer; transition:border-color .15s; }
+.sp-image-upload-zone:hover { border-color:var(--robin-dark); }
+.sp-image-upload-zone.has-images { border-style:solid; border-color:var(--robin); }
+.sp-image-upload-label { font-size:12px; color:var(--muted); text-align:center; }
+.sp-image-previews { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px; }
+.sp-image-preview { position:relative; aspect-ratio:1; border-radius:8px; overflow:hidden; background:var(--panel2); }
+.sp-image-preview img { width:100%; height:100%; object-fit:cover; }
+.sp-image-preview-remove { position:absolute; top:4px; right:4px; background:rgba(0,0,0,.6); color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:11px; display:flex; align-items:center; justify-content:center; }
+.sp-draft-chips { display:flex; gap:7px; flex-wrap:wrap; margin-top:8px; }
+.sp-draft-chip { padding:4px 11px; border-radius:999px; background:var(--panel2); border:1px solid var(--robin-dim); font-size:11px; font-weight:700; color:var(--robin-dark); font-family:'Source Code Pro',monospace; cursor:pointer; transition:.12s; white-space:nowrap; max-width:200px; overflow:hidden; text-overflow:ellipsis; }
+.sp-draft-chip:hover { background:var(--robin-faint); border-color:var(--robin-dark); }
+/* Preview card */
+.sp-preview-card { background:#fff; border:1.5px solid var(--robin-dim); border-radius:16px; overflow:hidden; }
+.sp-preview-head { padding:12px 14px 10px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--robin-line); }
+.sp-preview-avatar { width:36px; height:36px; border-radius:50%; background:var(--cast-hot-bg); border:2px solid var(--cast-hot); display:flex; align-items:center; justify-content:center; font-family:'Oswald',Arial,sans-serif; font-size:14px; font-weight:700; color:var(--cast-hot); flex-shrink:0; }
+.sp-preview-name   { font-size:13px; font-weight:700; color:var(--text); line-height:1.2; }
+.sp-preview-handle { font-family:'Source Code Pro',monospace; font-size:10px; color:var(--muted); }
+.sp-preview-body { padding:12px 14px; font-size:14px; color:var(--text); line-height:1.7; min-height:76px; word-break:break-word; white-space:pre-wrap; }
+.sp-preview-body.empty { color:var(--muted); font-style:italic; font-size:13px; white-space:normal; }
+.sp-preview-link { margin:0 14px 12px; background:var(--robin-faint); border:1px solid var(--robin-dim); border-radius:8px; padding:8px 10px; font-family:'Source Code Pro',monospace; font-size:10px; color:var(--robin-dark); word-break:break-all; display:none; }
+.sp-preview-link.show { display:block; }
+.sp-preview-images { display:grid; grid-template-columns:repeat(2,1fr); gap:4px; margin:0 14px 12px; border-radius:8px; overflow:hidden; }
+.sp-preview-images img { width:100%; aspect-ratio:1; object-fit:cover; }
+.sp-preview-foot { padding:7px 14px; border-top:1px solid var(--robin-line); display:flex; gap:14px; font-size:11px; color:var(--muted); font-family:'Source Code Pro',monospace; }
+.sp-limits-list { display:flex; flex-direction:column; }
+.sp-limits-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid var(--robin-line); font-size:12px; }
+.sp-limits-row:last-child { border-bottom:none; }
+/* Queue */
+.sp-queue-board { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px; }
+@media(max-width:900px){.sp-queue-board{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.sp-queue-board{grid-template-columns:1fr;}}
+.sp-qcol { background:var(--panel2); border:1.5px solid var(--robin-dim); border-radius:14px; overflow:hidden; }
+.sp-qcol-head { padding:9px 12px; border-bottom:1px solid var(--robin-dim); display:flex; align-items:center; justify-content:space-between; background:var(--frost); }
+.sp-qcol-label { font-family:'Oswald',Arial,sans-serif; font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+.sp-qcol-count { font-family:'Source Code Pro',monospace; font-size:11px; font-weight:700; background:#fff; border:1px solid var(--robin-dim); color:var(--muted); padding:1px 7px; border-radius:999px; }
+.sp-qcol-body { padding:8px; display:flex; flex-direction:column; gap:7px; min-height:56px; }
+.sp-qitem { background:#fff; border:1.5px solid var(--robin-dim); border-radius:10px; padding:9px 11px; transition:border-color .12s; }
+.sp-qitem:hover { border-color:var(--robin-dark); }
+.sp-qitem-title { font-size:11px; font-weight:700; color:var(--text); margin-bottom:4px; line-height:1.3; }
+.sp-qitem-meta { font-family:'Source Code Pro',monospace; font-size:10px; color:var(--muted); display:flex; gap:7px; flex-wrap:wrap; }
+.sp-qcol-empty { font-size:11px; color:var(--muted); text-align:center; padding:12px 0; font-family:'Source Code Pro',monospace; opacity:.7; }
+/* Calendar */
+.sp-cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:10px; flex-wrap:wrap; }
+.sp-cal-range { font-family:'Oswald',Arial,sans-serif; font-size:15px; font-weight:700; color:var(--text); }
+.sp-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; border:1.5px solid var(--robin-dim); border-radius:14px; overflow:hidden; background:var(--robin-dim); }
+.sp-cal-day-hdr { background:var(--panel2); padding:7px 4px; text-align:center; font-family:'Source Code Pro',monospace; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.sp-cal-day { background:var(--panel1); min-height:88px; padding:7px; }
+.sp-cal-day.today { background:var(--cast-hot-bg); }
+.sp-cal-day-num { font-family:'Source Code Pro',monospace; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:4px; }
+.sp-cal-day.today .sp-cal-day-num { color:var(--cast-hot); }
+.sp-cal-post { font-size:9px; font-weight:700; font-family:'Source Code Pro',monospace; border-radius:4px; padding:2px 5px; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sp-cal-post.scheduled { background:var(--cast-cold-bg); color:var(--cast-cold); }
+.sp-cal-post.published  { background:var(--success-bg);   color:var(--success); }
+.sp-cal-post.draft      { background:var(--panel2); color:var(--muted); border:1px solid var(--robin-dim); }
+.sp-cal-legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; }
+.sp-cal-legend-item { display:flex; align-items:center; gap:6px; font-family:'Source Code Pro',monospace; font-size:10px; color:var(--muted); }
+.sp-cal-legend-dot { width:10px; height:10px; border-radius:3px; }
+/* Analytics */
+.sp-bar-row { display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid var(--robin-line); }
+.sp-bar-row:last-child { border-bottom:none; }
+.sp-bar-label { font-size:12px; color:var(--text); min-width:155px; line-height:1.3; }
+.sp-bar-handle { font-family:'Source Code Pro',monospace; font-size:10px; color:var(--muted); display:block; }
+.sp-bar-track { flex:1; background:var(--panel2); border-radius:999px; height:8px; overflow:hidden; }
+.sp-bar-fill  { height:100%; background:var(--robin); border-radius:999px; }
+.sp-bar-num   { font-family:'Source Code Pro',monospace; font-size:12px; font-weight:700; color:var(--text); min-width:24px; text-align:right; }
+.sp-chart-ph { background:var(--panel2); border:1.5px solid var(--robin-dim); border-radius:12px; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
+.sp-chart-ph-icon  { font-size:26px; opacity:.4; }
+.sp-chart-ph-label { font-family:'Source Code Pro',monospace; font-size:11px; color:var(--muted); text-align:center; line-height:1.6; }
+/* Loading spinner */
+.sp-spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--robin-dim); border-top-color:var(--robin); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.sp-loading { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); padding:20px; justify-content:center; }
+/* Publish status banner */
+.sp-publish-banner { border-radius:10px; padding:10px 14px; font-size:12px; font-weight:700; margin-bottom:14px; display:none; }
+.sp-publish-banner.show { display:block; }
+.sp-publish-banner.ok  { background:var(--success-bg); color:var(--success); }
+.sp-publish-banner.err { background:var(--danger-bg);  color:var(--danger); }
+.sp-publish-banner.info { background:var(--cast-hot-bg); color:var(--cast-hot); }
+@media(max-width:760px){
+  .os-shell{padding:14px;border-radius:16px;}
+  .os-header{flex-direction:column;align-items:flex-start;}
+  .os-metric-grid{grid-template-columns:1fr 1fr;}
+  .os-field-row{grid-template-columns:1fr;}
+}
+</style>
+
+<!-- HEADER -->
+<div class="os-shell">
+<div class="os-header">
+  <div>
+    <div class="os-wordmark">WBN News Corp Inc.&#x2122; &middot; WBN Global Edition</div>
+    <h1 class="os-cast-name" id="osCastName">WBN Social Publisher&#x2122;</h1>
+    <div class="os-cast-tagline" id="osCastTagline">WBN Global &mdash; Social publishing powered by Cloudflare + Supabase</div>
+  </div>
+  <div><div class="os-version-pill" id="osVersionPill">v0.2 &middot; loading&hellip;</div></div>
+</div>
+
+<!-- TICKER -->
+<div class="os-ticker"><div class="os-ticker-inner" id="osTickerInner"><span class="os-ticker-label">WBN Global:</span> Loading&hellip;</div></div>
+
+<!-- CLOUD BANNER -->
+<div class="os-cloud-banner" id="osCloudBanner">&#9888; API unavailable &mdash; check Worker and Supabase connection</div>
+
+<!-- PUBLISH STATUS BANNER -->
+<div class="sp-publish-banner" id="sp-publish-banner"></div>
+
+<!-- TABS -->
+<div class="os-cast-tabs" id="osCastTabs">
+  <button class="os-cast-tab active" data-tab="sec-dashboard" type="button">Dashboard</button>
+  <button class="os-cast-tab" data-tab="sec-accounts"  type="button">Accounts</button>
+  <button class="os-cast-tab" data-tab="sec-composer"  type="button">Composer</button>
+  <button class="os-cast-tab" data-tab="sec-queue"     type="button">Queue</button>
+  <button class="os-cast-tab" data-tab="sec-calendar"  type="button">Calendar</button>
+  <button class="os-cast-tab" data-tab="sec-analytics" type="button">Analytics</button>
+  <button class="os-cast-tab" data-tab="sec-guide"     type="button">Guide</button>
+  <button class="os-cast-tab" data-tab="sec-about"     type="button">About</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="os-section-panel active" id="sec-dashboard">
+  <div class="os-metric-grid">
+    <div class="os-metric-card"><div class="os-metric-label">Total Posts</div><div class="os-metric-value" id="stat-total">&#8212;</div><div class="os-metric-sub">All time</div></div>
+    <div class="os-metric-card m-warning"><div class="os-metric-label">Drafts</div><div class="os-metric-value" id="stat-drafts">&#8212;</div><div class="os-metric-sub">In progress</div></div>
+    <div class="os-metric-card m-cold"><div class="os-metric-label">Scheduled</div><div class="os-metric-value cold" id="stat-scheduled">&#8212;</div><div class="os-metric-sub">Awaiting publish</div></div>
+    <div class="os-metric-card m-success"><div class="os-metric-label">Published</div><div class="os-metric-value" id="stat-published" style="color:var(--success)">&#8212;</div><div class="os-metric-sub">Live on Bluesky</div></div>
+    <div class="os-metric-card m-danger"><div class="os-metric-label">Failed</div><div class="os-metric-value" id="stat-failed" style="color:var(--danger)">&#8212;</div><div class="os-metric-sub">Needs attention</div></div>
+  </div>
+  <div class="sp-two-col">
+    <div class="os-panel">
+      <div class="os-panel-header"><div class="os-panel-title">Activity Log</div><span class="os-badge" id="dash-sync-badge">Loading&#8230;</span></div>
+      <div class="os-panel-body" id="sp-activity-feed"><div class="sp-loading"><div class="sp-spinner"></div>Loading activity&#8230;</div></div>
+    </div>
+    <div>
+      <div class="os-panel" style="margin-bottom:14px;">
+        <div class="os-panel-header"><div class="os-panel-title">Account Status</div><span class="os-badge" id="dash-acct-count">&#8212;</span></div>
+        <div class="os-panel-body" id="dash-acct-cards"><div class="sp-loading"><div class="sp-spinner"></div>Loading&#8230;</div></div>
+      </div>
+      <div class="os-panel">
+        <div class="os-panel-header"><div class="os-panel-title">Quick Actions</div></div>
+        <div class="os-panel-body" style="display:flex;flex-direction:column;gap:8px;">
+          <button class="os-btn" id="btn-dash-compose" type="button">+ Compose New Post</button>
+          <button class="os-btn ghost" id="btn-dash-queue" type="button">Review Queue</button>
+          <button class="os-btn ghost" id="btn-dash-calendar" type="button">View Calendar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNTS -->
+<div class="os-section-panel" id="sec-accounts">
+  <div class="os-panel">
+    <div class="os-panel-header">
+      <div class="os-panel-title">Social Accounts</div>
+      <button class="os-btn small" id="btn-show-connect-form" type="button">+ Connect Account</button>
+    </div>
+    <div class="os-panel-body">
+      <!-- Connect form (hidden by default) -->
+      <div class="sp-connect-form" id="sp-connect-form" style="display:none;">
+        <div class="sp-connect-form-title">Connect Bluesky Account</div>
+        <div class="os-msg" id="connect-msg"></div>
+        <div class="os-field-row">
+          <div><label class="os-field-label">Account Name</label><input class="os-admin-field" id="connect-name" placeholder="WBN Global" style="margin-bottom:0;"></div>
+          <div><label class="os-field-label">Bluesky Handle</label><input class="os-admin-field" id="connect-handle" placeholder="@wbnnews.bsky.social" style="margin-bottom:0;"></div>
+        </div>
+        <div style="margin-top:12px;">
+          <label class="os-field-label">App Password <span style="font-weight:400;text-transform:none;letter-spacing:0;">(generate in Bluesky Settings &#8594; App Passwords)</span></label>
+          <input class="os-admin-field" type="password" id="connect-app-password" placeholder="xxxx-xxxx-xxxx-xxxx" style="margin-bottom:0;">
+        </div>
+        <div class="os-field-row" style="margin-top:12px;">
+          <div><label class="os-field-label">Default CTA</label><input class="os-admin-field" id="connect-cta" placeholder="Read the full story at wbncast.com" style="margin-bottom:0;"></div>
+          <div><label class="os-field-label">Default Hashtags</label><input class="os-admin-field" id="connect-hashtags" placeholder="#WBNCast #News" style="margin-bottom:0;"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:14px;">
+          <button class="os-btn" id="btn-connect-account" type="button">Connect Account</button>
+          <button class="os-btn ghost small" id="btn-cancel-connect" type="button">Cancel</button>
+        </div>
+      </div>
+      <!-- Accounts list -->
+      <div id="sp-accounts-list"><div class="sp-loading"><div class="sp-spinner"></div>Loading accounts&#8230;</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPOSER -->
+<div class="os-section-panel" id="sec-composer">
+  <div class="os-panel">
+    <div class="os-panel-header">
+      <div class="os-panel-title">Post Composer</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="os-panel-sub">Account:</span>
+        <select class="os-admin-field" id="composer-acct-sel" style="width:220px;margin:0;font-size:12px;padding:6px 10px;"></select>
+      </div>
+    </div>
+    <div class="os-panel-body">
+      <div class="sp-composer-grid">
+        <div>
+          <label class="os-field-label">Master Post Text</label>
+          <textarea class="os-admin-field" id="composer-text" rows="5" style="margin-bottom:0;resize:vertical;" placeholder="Write your post here&#8230;"></textarea>
+          <div class="sp-char-bar">
+            <span class="sp-char-counter" id="char-counter">0 / 300 (Bluesky)</span>
+          </div>
+
+          <div style="margin-top:13px;">
+            <label class="os-field-label">Link (optional)</label>
+            <input class="os-admin-field" type="url" id="composer-link" style="margin-bottom:0;" placeholder="https://wbncast.com/story/&#8230;" />
+          </div>
+
+          <!-- Image upload zone -->
+          <div class="sp-image-upload-zone" id="sp-image-upload-zone">
+            <input type="file" id="sp-image-input" accept="image/jpeg,image/png,image/webp,image/gif" multiple style="display:none;">
+            <div class="sp-image-upload-label" id="sp-image-upload-label">
+              &#128247; Click to attach images &mdash; up to 4, max 5MB each (Bluesky limit)
+            </div>
+            <div class="sp-image-previews" id="sp-image-previews"></div>
+          </div>
+
+          <div style="margin-top:13px;">
+            <label class="os-field-label">Hashtags</label>
+            <input class="os-admin-field" type="text" id="composer-tags" style="margin-bottom:0;" placeholder="#WBNCast #News" />
+          </div>
+
+          <div class="sp-composer-actions">
+            <button class="os-btn ghost" id="btn-save-draft" type="button">Save Draft</button>
+            <button class="os-btn secondary" id="btn-schedule" type="button">&#9201; Schedule</button>
+            <button class="os-btn success" id="btn-publish-now" type="button">&#128640; Publish Now</button>
+          </div>
+
+          <!-- App password prompt for publishing -->
+          <div id="sp-publish-auth" style="display:none;margin-top:14px;background:var(--panel2);border:1px solid var(--robin-dim);border-radius:10px;padding:14px;">
+            <div class="os-field-label" style="margin-bottom:6px;">Enter App Password to publish</div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="password" class="os-admin-field" id="publish-app-password" placeholder="xxxx-xxxx-xxxx-xxxx" style="margin-bottom:0;flex:1;">
+              <button class="os-btn success small" id="btn-confirm-publish" type="button">Publish</button>
+              <button class="os-btn ghost small" id="btn-cancel-publish" type="button">Cancel</button>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;">
+            <div class="os-panel-sub" style="margin-bottom:6px;">Load saved draft:</div>
+            <div class="sp-draft-chips" id="sp-draft-chips"></div>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div>
+          <div class="os-field-label" style="margin-bottom:7px;">Live Preview &mdash; Bluesky</div>
+          <div class="sp-preview-card">
+            <div class="sp-preview-head">
+              <div class="sp-preview-avatar" id="prev-avatar">W</div>
+              <div>
+                <div class="sp-preview-name" id="prev-name">WBN Global</div>
+                <div class="sp-preview-handle" id="prev-handle">@wbnnews.bsky.social</div>
+              </div>
+              <span class="sp-platform-chip" style="margin-left:auto;">Bluesky</span>
+            </div>
+            <div class="sp-preview-body empty" id="prev-body">Your post text will appear here as you type&#8230;</div>
+            <div class="sp-preview-link" id="prev-link"><span id="prev-link-txt"></span></div>
+            <div class="sp-preview-images" id="prev-images" style="display:none;"></div>
+            <div class="sp-preview-foot">
+              <span>&#128172; Reply</span><span>&#128257; Repost</span><span>&#10084; Like</span>
+              <span style="margin-left:auto;font-size:9px;color:var(--robin-dim);">Preview only</span>
+            </div>
+          </div>
+          <div class="os-panel" style="margin-top:12px;">
+            <div class="os-panel-header"><div class="os-panel-title">Platform Limits</div></div>
+            <div class="os-panel-body sp-limits-list" id="sp-limits-list">
+              <div class="sp-limits-row"><span style="font-weight:700;">Bluesky</span><span style="font-family:'Source Code Pro',monospace;color:var(--muted);">300 chars</span></div>
+              <div class="sp-limits-row"><span style="font-weight:700;">Images</span><span style="font-family:'Source Code Pro',monospace;color:var(--muted);">Max 4 per post</span></div>
+              <div class="sp-limits-row"><span style="font-weight:700;">Image size</span><span style="font-family:'Source Code Pro',monospace;color:var(--muted);">5MB each</span></div>
+              <div class="sp-limits-row"><span style="font-weight:700;">Formats</span><span style="font-family:'Source Code Pro',monospace;color:var(--muted);">JPG PNG WEBP GIF</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUEUE -->
+<div class="os-section-panel" id="sec-queue">
+  <div class="os-panel">
+    <div class="os-panel-header"><div class="os-panel-title">Publishing Queue</div><span class="os-badge hot">Live &mdash; Cloudflare Cron</span></div>
+    <div class="os-panel-body">
+      <div class="sp-queue-board" id="sp-queue-board"></div>
+      <div class="os-panel-title" style="font-size:13px;margin-bottom:10px;">All Queue Items</div>
+      <div class="os-table-wrap">
+        <table class="os-table">
+          <thead><tr><th>Post</th><th>Account</th><th>Status</th><th>Scheduled</th><th>Action</th></tr></thead>
+          <tbody id="sp-queue-tbody"><tr><td colspan="5"><div class="sp-loading"><div class="sp-spinner"></div>Loading&#8230;</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div class="os-section-panel" id="sec-calendar">
+  <div class="os-panel">
+    <div class="os-panel-header"><div class="os-panel-title">Publishing Calendar</div><span class="os-badge">Weekly View</span></div>
+    <div class="os-panel-body">
+      <div class="sp-cal-nav">
+        <button class="os-btn ghost small" id="cal-prev" type="button">&larr; Prev Week</button>
+        <div class="sp-cal-range" id="cal-range"></div>
+        <button class="os-btn ghost small" id="cal-next" type="button">Next Week &rarr;</button>
+      </div>
+      <div class="sp-cal-grid" id="sp-cal-grid"></div>
+      <div class="sp-cal-legend">
+        <div class="sp-cal-legend-item"><div class="sp-cal-legend-dot" style="background:var(--cast-cold-bg);border:1px solid #8ab8e0;"></div>Scheduled</div>
+        <div class="sp-cal-legend-item"><div class="sp-cal-legend-dot" style="background:var(--success-bg);border:1px solid #a8dfc0;"></div>Published</div>
+        <div class="sp-cal-legend-item"><div class="sp-cal-legend-dot" style="background:var(--panel2);border:1px solid var(--robin-dim);"></div>Draft</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="os-section-panel" id="sec-analytics">
+  <div class="os-panel">
+    <div class="os-panel-header"><div class="os-panel-title">Analytics</div><span class="os-badge hot">Live Data</span></div>
+    <div class="os-panel-body">
+      <div class="os-metric-grid" style="margin-bottom:18px;">
+        <div class="os-metric-card"><div class="os-metric-label">Total Posts</div><div class="os-metric-value" id="an-total">&#8212;</div></div>
+        <div class="os-metric-card m-cold"><div class="os-metric-label">Scheduled</div><div class="os-metric-value cold" id="an-scheduled">&#8212;</div></div>
+        <div class="os-metric-card m-success"><div class="os-metric-label">Published</div><div class="os-metric-value" id="an-published" style="color:var(--success)">&#8212;</div></div>
+        <div class="os-metric-card m-danger"><div class="os-metric-label">Failed</div><div class="os-metric-value" id="an-failed" style="color:var(--danger)">&#8212;</div></div>
+        <div class="os-metric-card m-hot"><div class="os-metric-label">Accounts</div><div class="os-metric-value hot" id="an-accounts">&#8212;</div></div>
+      </div>
+      <div class="sp-two-col">
+        <div class="os-panel" style="margin-bottom:0;">
+          <div class="os-panel-header"><div class="os-panel-title">Posts by Account</div></div>
+          <div class="os-panel-body" id="sp-analytics-bars"><div class="sp-loading"><div class="sp-spinner"></div>Loading&#8230;</div></div>
+        </div>
+        <div class="os-panel" style="margin-bottom:0;">
+          <div class="os-panel-header"><div class="os-panel-title">Publishing Activity</div><div class="os-panel-sub">Bluesky engagement in v0.3</div></div>
+          <div class="os-panel-body">
+            <div class="sp-chart-ph"><div class="sp-chart-ph-icon">&#128200;</div><div class="sp-chart-ph-label">Bluesky engagement analytics<br>coming in v0.3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDE -->
+<div class="os-section-panel" id="sec-guide">
+  <div class="os-panel">
+    <div class="os-panel-header"><div class="os-panel-title">How Social Publisher&#x2122; Works</div></div>
+    <div class="os-panel-body">
+      <div class="os-feed-why" style="margin-bottom:16px;"><strong>WBN Global Edition &mdash;</strong> This instance of WBN Social Publisher&#x2122; is dedicated to the WBN Global editorial team. It connects directly to your Bluesky accounts via the AT Protocol, with all credentials secured in Cloudflare Workers. Posts are stored in Supabase and scheduled posts fire automatically via Cloudflare Cron Triggers &mdash; even when no browser tab is open.</div>
+      <div class="os-grid">
+        <div class="os-grid-card"><div class="os-grid-card-title">1. Connect Accounts</div><div class="os-grid-card-body">Go to Accounts tab. Click Connect Account. Enter your Bluesky handle and an App Password generated in Bluesky Settings &#8594; App Passwords. Credentials are validated against the AT Protocol and stored securely in Cloudflare.</div></div>
+        <div class="os-grid-card"><div class="os-grid-card-title">2. Compose</div><div class="os-grid-card-body">Write your post, attach up to 4 images, add a link and hashtags. The live preview shows exactly how it will appear on Bluesky. The character counter enforces the 300-character limit in real time.</div></div>
+        <div class="os-grid-card"><div class="os-grid-card-title">3. Publish or Schedule</div><div class="os-grid-card-body">Hit Publish Now to post immediately &mdash; you&#39;ll be prompted for your App Password to authorise the post. Or schedule for a future date and time. Cloudflare Cron fires scheduled posts automatically every minute.</div></div>
+        <div class="os-grid-card"><div class="os-grid-card-title">4. Track</div><div class="os-grid-card-body">The Queue shows every post&#39;s status from Draft through to Published or Failed. The Calendar gives a weekly view across all accounts. The Activity Log records every event in real time from Supabase.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="os-section-panel" id="sec-about">
+  <div class="os-panel">
+    <div class="os-panel-header"><div class="os-panel-title">About This Instance</div><div class="os-panel-sub">WBN Global Edition</div></div>
+    <div class="os-panel-body">
+      <div class="os-feed-why"><strong>WBN Social Publisher&#x2122; v0.2 &mdash; WBN Global Edition.</strong> This is the WBN Global spoke instance of the WBN Social Publisher&#x2122; platform. It is part of a hub-and-spoke architecture managed by WBN Corp. Corp can push posts to this edition and view cross-publication analytics. This edition manages its own Bluesky accounts independently.</div>
+      <div class="os-grid">
+        <div class="os-grid-card"><div class="os-grid-card-title">Infrastructure</div><div class="os-grid-card-body"><code>API</code> Cloudflare Workers<br><code>Database</code> Supabase PostgreSQL<br><code>Storage</code> Supabase Storage<br><code>Auth</code> App Passwords (AT Protocol)<br><code>Scheduling</code> Cloudflare Cron Triggers</div></div>
+        <div class="os-grid-card"><div class="os-grid-card-title">Platform</div><div class="os-grid-card-body"><code>Product</code> WBN Social Publisher&#x2122; v0.2<br><code>OS</code> WBN Operating Platform&#x2122; v1.0<br><code>Cast OS</code> WBN Cast OS&#x2122; v0.3<br><code>Design</code> Robin Blue v3.2<br><code>Deploy</code> Ghost-ready single file</div></div>
+        <div class="os-grid-card"><div class="os-grid-card-title">Edition</div><div class="os-grid-card-body"><code>Name</code> WBN Global<br><code>Slug</code> global<br><code>Role</code> Spoke<br><code>Hub</code> WBN Corp<br><code>Platform</code> Bluesky (AT Protocol)</div></div>
+        <div class="os-grid-card"><div class="os-grid-card-title">Roadmap</div><div class="os-grid-card-body"><strong>v0.2</strong> Live posting, images, accounts &#10003;<br><strong>v0.3</strong> Corp hub dashboard, cross-edition<br><strong>v0.4</strong> Amplification, real-time sync<br><strong>v0.5</strong> Multi-platform expansion</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPONSOR BAR (mandatory — Style Guide v3.2) -->
+<div class="os-sponsor-bar">
+  <span class="os-sponsor-label" id="osSponsorLabel">Presented by</span>
+  <a href="#" class="os-btn sponsor-btn" id="osSponsorBtn" target="_blank" rel="noopener">WBN Cast Network&#x2122;</a>
+</div>
+
+<!-- ADMIN SYSTEM (locked — do not restructure) -->
+<div class="os-admin-wrap" id="osAdminWrap">
+  <div class="os-panel" id="osAdminLoginPanel">
+    <div class="os-panel-header"><div class="os-panel-title">Admin Login &mdash; WBN Global Edition</div></div>
+    <div class="os-panel-body">
+      <div class="os-msg" id="osLoginMsg"></div>
+      <div class="os-admin-login-box">
+        <label class="os-field-label">Password</label>
+        <input type="password" class="os-admin-field" id="osLoginPassword" placeholder="Enter admin password">
+        <button class="os-btn dark" id="osLoginBtn" type="button">Log In</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.7;">
+        Default passwords: <strong>Super:</strong> wbng-super-2026 &nbsp; <strong>Admin:</strong> wbng-admin-2026 &nbsp; <strong>Editor:</strong> wbng-editor-2026<br>
+        Change these immediately in the Permissions tab.
+      </div>
+    </div>
+  </div>
+
+  <div class="os-panel" id="osAdminPanel" style="display:none;">
+    <div class="os-panel-header">
+      <div class="os-panel-title">Admin &mdash; WBN Global</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="os-role-pill" id="osRolePill"></span>
+        <button class="os-btn ghost small" id="osLogoutBtn" type="button">Log Out</button>
+      </div>
+    </div>
+    <div class="os-panel-body">
+
+      <!-- API Status -->
+      <div class="os-panel" style="margin-bottom:14px;">
+        <div class="os-panel-header"><div class="os-panel-title">API &amp; Infrastructure Status</div></div>
+        <div class="os-panel-body">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+            <span class="os-badge" id="osSyncBadge">&#8212;</span>
+            <button class="os-btn ghost small" id="osForceSyncBtn" type="button">Test Connection</button>
+          </div>
+          <div class="os-field-row">
+            <div><span class="os-field-label">Worker URL</span><div style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--text);" id="admin-worker-url"></div></div>
+            <div><span class="os-field-label">Edition</span><div style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--text);">WBN Global</div></div>
+            <div><span class="os-field-label">Last Sync</span><div style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--text);" id="osLastPull">&#8212;</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="os-admin-tabs" id="osAdminTabs"></div>
+
+      <!-- Marketing -->
+      <div class="os-admin-panel" id="admin-marketing">
+        <div class="os-msg" id="osMarketingMsg"></div>
+        <label class="os-field-label">Ticker Message</label>
+        <textarea class="os-admin-field" id="osTickerInput" rows="2"></textarea>
+        <div class="os-field-row">
+          <div><label class="os-field-label">Sponsor Label</label><input class="os-admin-field" id="osSponsorLabelInput"></div>
+          <div><label class="os-field-label">Sponsor URL</label><input class="os-admin-field" id="osSponsorUrlInput"></div>
+        </div>
+        <button class="os-btn" id="osSaveMarketingBtn" type="button">Save Marketing</button>
+        <div id="osCastMarketingSlot" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--robin-dim);">
+          <div class="os-panel-title" style="font-size:13px;margin-bottom:12px;">Default Publishing Settings</div>
+          <div class="os-field-row">
+            <div><label class="os-field-label">Default CTA</label><input class="os-admin-field" id="sp-admin-cta"></div>
+            <div><label class="os-field-label">Default Hashtags</label><input class="os-admin-field" id="sp-admin-hashtags"></div>
+          </div>
+          <button class="os-btn ghost small" id="btn-save-sp-settings" type="button">Save Settings</button>
+        </div>
+      </div>
+
+      <!-- Academy -->
+      <div class="os-admin-panel" id="admin-academy">
+        <div class="os-panel-title" style="margin-bottom:4px;">WBN Social Publisher&#x2122; v0.2 &mdash; Admin Academy</div>
+        <div class="os-panel-sub" style="margin-bottom:14px;">WBN Global Edition &mdash; Infrastructure-backed publishing</div>
+        <div class="os-grid">
+          <div class="os-grid-card"><div class="os-grid-card-title">Architecture</div><div class="os-grid-card-body">All data lives in Supabase PostgreSQL. All API calls go through the Cloudflare Worker at <code>wbn-sp-api.gmoen.workers.dev</code>. No secrets ever touch the browser. App passwords are used per publish action and never stored in the UI.</div></div>
+          <div class="os-grid-card"><div class="os-grid-card-title">Connecting Accounts</div><div class="os-grid-card-body">Go to Accounts &#8594; Connect Account. You need a Bluesky App Password, not your main password. Generate one in Bluesky Settings &#8594; App Passwords. Name it <code>wbn-social-publisher</code>. Each account is validated against the AT Protocol before saving.</div></div>
+          <div class="os-grid-card"><div class="os-grid-card-title">Publishing Flow</div><div class="os-grid-card-body">Compose &#8594; Save Draft &#8594; Queue &#8594; Publish Now or Schedule. Publish Now prompts for your App Password each time for security. Scheduled posts fire via Cloudflare Cron every minute &mdash; no browser tab needed.</div></div>
+          <div class="os-grid-card"><div class="os-grid-card-title">Images</div><div class="os-grid-card-body">Up to 4 images per post. JPEG, PNG, WEBP, GIF. Max 5MB each. Images preview instantly in the composer. On publish, they are uploaded to Bluesky via <code>uploadBlob</code> before the post is created.</div></div>
+          <div class="os-grid-card"><div class="os-grid-card-title">Hub &amp; Spoke</div><div class="os-grid-card-body">This is the WBN Global spoke. WBN Corp (the hub) can push posts to this edition. Corp-pushed posts appear in the Queue as <code>corp_push</code> items for review before publishing.</div></div>
+          <div class="os-grid-card"><div class="os-grid-card-title">Admin Roles</div><div class="os-grid-card-body"><strong>Super</strong> &mdash; full access, passwords, data reset.<br><strong>Admin</strong> &mdash; marketing, accounts, posts, settings.<br><strong>Editor</strong> &mdash; marketing and default settings only.<br>Change defaults before first use.</div></div>
+        </div>
+      </div>
+
+      <!-- Data -->
+      <div class="os-admin-panel" id="admin-data">
+        <div class="os-msg" id="osDataMsg"></div>
+        <div id="osCastDataSlot">
+          <div class="os-panel-title" style="font-size:13px;margin-bottom:10px;">Edition Data Summary</div>
+          <div style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--muted);background:var(--panel2);padding:12px;border-radius:10px;line-height:1.9;margin-bottom:14px;" id="sp-data-summary">Loading&#8230;</div>
+          <button class="os-btn ghost small" id="btn-export-data" type="button">&#11015; Export Posts (JSON)</button>
+        </div>
+        <div class="os-danger-zone" id="osDangerZone">
+          <div class="os-danger-zone-title">Danger Zone &mdash; Super Only</div>
+          <p style="font-size:12px;color:var(--danger);margin-bottom:10px;">This will delete all posts and accounts for the WBN Global edition from Supabase. Cannot be undone.</p>
+          <button class="os-btn danger small" id="osClearAllBtn" type="button">Delete All Edition Data</button>
+        </div>
+      </div>
+
+      <!-- Permissions -->
+      <div class="os-admin-panel" id="admin-permissions">
+        <div class="os-msg" id="osPermMsg"></div>
+        <div class="os-panel-sub" style="margin-bottom:14px;">Passwords are stored in Supabase global_settings for this edition.</div>
+        <div class="os-field-row">
+          <div><label class="os-field-label">New Super Password</label><input class="os-admin-field" type="password" id="osPwSuper"></div>
+          <div><label class="os-field-label">New Admin Password</label><input class="os-admin-field" type="password" id="osPwAdmin"></div>
+          <div><label class="os-field-label">New Editor Password</label><input class="os-admin-field" type="password" id="osPwEditor"></div>
+        </div>
+        <button class="os-btn" id="osSavePasswordsBtn" type="button" style="margin-bottom:14px;">Update Passwords</button>
+        <table class="os-access-table">
+          <thead><tr><th>Feature</th><th>Super</th><th>Admin</th><th>Editor</th></tr></thead>
+          <tbody>
+            <tr><td>Compose &amp; publish posts</td><td>&#9989;</td><td>&#9989;</td><td>&#9989;</td></tr>
+            <tr><td>Connect &amp; manage accounts</td><td>&#9989;</td><td>&#9989;</td><td>&#8212;</td></tr>
+            <tr><td>Marketing &amp; ticker</td><td>&#9989;</td><td>&#9989;</td><td>&#9989;</td></tr>
+            <tr><td>Academy</td><td>&#9989;</td><td>&#9989;</td><td>&#9989;</td></tr>
+            <tr><td>Data export</td><td>&#9989;</td><td>&#9989;</td><td>&#8212;</td></tr>
+            <tr><td>Delete all data</td><td>&#9989;</td><td>&#8212;</td><td>&#8212;</td></tr>
+            <tr><td>Change passwords</td><td>&#9989;</td><td>&#8212;</td><td>&#8212;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER (mandatory — Style Guide v3.2) -->
+<div class="os-footer-bar">
+  <div class="os-footer-meta" id="osFooterStamp">WBN Social Publisher&#x2122; v0.2 | WBN Global Edition | Built on WBN Operating Platform&#x2122; v1.0 | WBN Cast OS&#x2122; v0.3 | loading&#8230;</div>
+  <div class="os-footer-right">
+    <span class="os-badge" id="osFooterSyncBadge">&#8212;</span>
+    <button class="os-admin-toggle" id="osAdminToggleBtn" type="button">&#128274; Admin</button>
+  </div>
+</div>
+
+</div><!-- /.os-shell -->
+</div><!-- /#spOS -->
+
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+   WBN Social Publisher™ v0.2 — WBN Global Edition
+   WBN Operating Platform™ v1.0 | Style Guide v3.2
+   Infrastructure: Cloudflare Workers + Supabase
+   All JS inside IIFE. No inline onclick handlers.
+============================================================ */
+
+/* ── CAST CONFIG ── */
+var APP_VERSION   = 'v0.2';
+var CAST_NAME     = 'WBN Social Publisher\u2122';
+var EDITION_NAME  = 'WBN Global';
+var EDITION_SLUG  = 'global';
+var CAST_PREFIX   = 'spOS_global_';
+
+/* ── INFRASTRUCTURE CONFIG ──
+   Replace EDITION_ID with the UUID from your Supabase editions table
+   where slug = 'global'
+   Worker URL is your Cloudflare Worker endpoint */
+var WORKER_URL  = 'https://wbn-sp-api.gmoen.workers.dev';
+var EDITION_ID  = 'PASTE_YOUR_GLOBAL_EDITION_ID_HERE';
+
+/* Default passwords — stored in Supabase, change after first login */
+var DEFAULT_PW = { super:'wbng-super-2026', admin:'wbng-admin-2026', editor:'wbng-editor-2026' };
+
+/* ── APP STATE ── */
+var STATE = {
+  accounts:    [],
+  posts:       [],
+  activity:    [],
+  settings:    { ticker:'', sponsorLabel:'Presented by', sponsorUrl:'#', defaultCTA:'Read the full story at wbncast.com', defaultHashtags:'#WBNCast #News' },
+  passwords:   { super: DEFAULT_PW.super, admin: DEFAULT_PW.admin, editor: DEFAULT_PW.editor },
+  loaded:      false
+};
+
+/* Composer state */
+var COMPOSER = {
+  images:     [], /* Array of { file, dataUrl, mimeType } */
+  pendingPostId: null,
+  pendingAccountId: null
+};
+
+var uiState = { adminRole: null, calWeekOffset: 0 };
+
+/* ── localStorage helpers ── */
+function sessGet(k,fb){try{var v=localStorage.getItem(CAST_PREFIX+k);return v===null?fb:JSON.parse(v);}catch(e){return fb;}}
+function sessSet(k,v){try{localStorage.setItem(CAST_PREFIX+k,JSON.stringify(v));}catch(e){}}
+
+/* ── API helpers ── */
+async function api(path, method, body) {
+  method = method || 'GET';
+  var opts = { method: method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    var res = await fetch(WORKER_URL + path, opts);
+    var data = await res.json();
+    return { ok: res.ok, status: res.status, data: data };
+  } catch(e) {
+    return { ok: false, status: 0, data: { error: e.message } };
+  }
+}
+
+/* ── Utilities ── */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function set(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+function showMsg(id,txt,ok){
+  var el=document.getElementById(id);if(!el)return;
+  el.textContent=txt;el.className='os-msg show '+(ok?'ok':'err');
+  setTimeout(function(){el.classList.remove('show');},3500);
+}
+function showBanner(txt, type) {
+  var el = document.getElementById('sp-publish-banner');
+  if (!el) return;
+  el.textContent = txt;
+  el.className = 'sp-publish-banner show ' + (type || 'info');
+  setTimeout(function(){ el.classList.remove('show'); }, 5000);
+}
+function fmtDate(iso){
+  if(!iso)return'\u2014';
+  try{var d=new Date(iso);return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit'});}
+  catch(e){return'\u2014';}
+}
+function statusBadge(s){
+  var m={draft:['','Draft'],pending_review:['warning','Pending Review'],scheduled:['cold','Scheduled'],publishing:['hot','Publishing'],published:['success','Published'],failed:['danger','Failed']};
+  var r=m[s]||['',s];return'<span class="os-badge '+r[0]+'">'+esc(r[1])+'</span>';
+}
+function getAcctById(id){return STATE.accounts.find(function(a){return a.id===id;})||{name:'\u2014',handle:'\u2014',avatar_initial:'?'};}
+function setSyncBadge(label, cls) {
+  var fb = document.getElementById('osFooterSyncBadge');
+  var sb = document.getElementById('osSyncBadge');
+  var dsb = document.getElementById('dash-sync-badge');
+  [fb,sb,dsb].forEach(function(el){ if(el){ el.textContent=label; el.className='os-badge '+(cls||''); } });
+}
+
+/* ── Sponsor bar ── */
+function applySponsor(){
+  var sl=document.getElementById('osSponsorLabel');if(sl)sl.textContent=STATE.settings.sponsorLabel||'Presented by';
+  var sb=document.getElementById('osSponsorBtn');if(sb)sb.href=STATE.settings.sponsorUrl||'#';
+}
+document.getElementById('osSponsorBtn').addEventListener('click',function(){});
+
+/* ── Ticker ── */
+function renderTicker(){
+  var el=document.getElementById('osTickerInner');if(!el)return;
+  var txt=STATE.settings.ticker||EDITION_NAME+': Live social publishing powered by Cloudflare + Supabase \u00b7 Bluesky AT Protocol \u00b7 WBN Global Edition';
+  el.innerHTML='<span class="os-ticker-label">'+esc(EDITION_NAME)+':</span> '+esc(txt);
+}
+
+/* ── Footer stamp ── */
+function stampFooter(){
+  var d=new Date();
+  var stamp=('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)+'-'+String(d.getFullYear()).slice(-2)+' PST';
+  var vp=document.getElementById('osVersionPill');if(vp)vp.textContent=APP_VERSION+' \u00b7 '+stamp;
+  var fs=document.getElementById('osFooterStamp');if(fs)fs.textContent='WBN Social Publisher\u2122 '+APP_VERSION+' | WBN Global Edition | Built on WBN Operating Platform\u2122 v1.0 | WBN Cast OS\u2122 v0.3 | '+stamp;
+  var wu=document.getElementById('admin-worker-url');if(wu)wu.textContent=WORKER_URL;
+}
+
+/* ── Tab navigation ── */
+document.querySelectorAll('#spOS .os-cast-tabs .os-cast-tab').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    document.querySelectorAll('#spOS .os-cast-tabs .os-cast-tab').forEach(function(t){t.classList.remove('active');});
+    this.classList.add('active');
+    var target=this.getAttribute('data-tab');
+    document.querySelectorAll('#spOS .os-section-panel').forEach(function(s){s.classList.remove('active');});
+    var sec=document.getElementById(target);if(sec)sec.classList.add('active');
+    if(target==='sec-accounts')  renderAccounts();
+    if(target==='sec-queue')     renderQueue();
+    if(target==='sec-calendar')  renderCalendar();
+    if(target==='sec-analytics') renderAnalytics();
+  });
+});
+
+function activateTab(id){
+  document.querySelectorAll('#spOS .os-cast-tabs .os-cast-tab').forEach(function(t){t.classList.toggle('active',t.getAttribute('data-tab')===id);});
+  document.querySelectorAll('#spOS .os-section-panel').forEach(function(s){s.classList.toggle('active',s.id===id);});
+  if(id==='sec-accounts')  renderAccounts();
+  if(id==='sec-queue')     renderQueue();
+  if(id==='sec-calendar')  renderCalendar();
+  if(id==='sec-analytics') renderAnalytics();
+}
+
+/* ── Load data from Supabase via Worker ── */
+async function loadData() {
+  setSyncBadge('Syncing\u2026','warning');
+
+  var [postsRes, acctsRes, actRes] = await Promise.all([
+    api('/api/posts?edition_id='+EDITION_ID),
+    api('/api/accounts?edition_id='+EDITION_ID),
+    api('/api/activity?edition_id='+EDITION_ID)
+  ]);
+
+  if(!postsRes.ok || !acctsRes.ok) {
+    setSyncBadge('API Error','danger');
+    var b=document.getElementById('osCloudBanner');if(b)b.classList.add('show');
+    return false;
+  }
+
+  STATE.posts    = postsRes.data  || [];
+  STATE.accounts = acctsRes.data  || [];
+  STATE.activity = actRes.data    || [];
+  STATE.loaded   = true;
+
+  setSyncBadge('Live','success');
+  var lp=document.getElementById('osLastPull');if(lp)lp.textContent=new Date().toLocaleString();
+  var b=document.getElementById('osCloudBanner');if(b)b.classList.remove('show');
+  return true;
+}
+
+/* ── Dashboard ── */
+function renderDashboard(){
+  var q=STATE.posts, a=STATE.accounts;
+  set('stat-total',     q.length);
+  set('stat-drafts',    q.filter(function(x){return x.status==='draft';}).length);
+  set('stat-scheduled', q.filter(function(x){return x.status==='scheduled';}).length);
+  set('stat-published', q.filter(function(x){return x.status==='published';}).length);
+  set('stat-failed',    q.filter(function(x){return x.status==='failed';}).length);
+
+  /* Activity feed */
+  var feed=document.getElementById('sp-activity-feed');
+  if(feed){
+    var log=STATE.activity;
+    feed.innerHTML=log.length?log.map(function(item){
+      var icon = item.event==='published'?'\u2705':item.event==='failed'?'\u274C':item.event==='scheduled'?'\u23F1':item.event==='account_connected'?'\uD83D\uDD17':'\uD83D\uDCDD';
+      return'<div class="sp-activity-row"><div class="sp-activity-icon">'+icon+'</div>'+
+        '<div style="flex:1;"><div class="sp-activity-desc">'+esc(item.description)+'</div>'+
+        (item.handle?'<div class="sp-activity-handle">'+esc(item.handle)+'</div>':'')+
+        '</div><div class="sp-activity-time">'+fmtDate(item.created_at)+'</div></div>';
+    }).join(''):'<div style="font-size:12px;color:var(--muted);padding:10px 0;">No activity yet. Connect an account and publish your first post.</div>';
+  }
+
+  /* Account cards */
+  var cnt=document.getElementById('dash-acct-count');
+  if(cnt)cnt.textContent=a.length+' account'+(a.length!==1?'s':'');
+  var cards=document.getElementById('dash-acct-cards');
+  if(cards){
+    cards.innerHTML=a.length?a.map(function(acc){
+      var statusCls=acc.status==='connected'?'success':'warning';
+      return'<div class="sp-dash-acct-row">'+
+        '<div class="sp-mini-av">'+esc(acc.avatar_initial||'W')+'</div>'+
+        '<div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--text);">'+esc(acc.name)+'</div>'+
+        '<div style="font-family:\'Source Code Pro\',monospace;font-size:10px;color:var(--robin-dark);">'+esc(acc.handle)+'</div></div>'+
+        '<span class="os-badge '+statusCls+'">'+esc(acc.status)+'</span></div>';
+    }).join(''):'<div style="font-size:12px;color:var(--muted);">No accounts connected yet. <a href="#" id="link-to-accounts" style="color:var(--robin-dark);">Connect your first account</a>.</div>';
+
+    var lnk=document.getElementById('link-to-accounts');
+    if(lnk)lnk.addEventListener('click',function(e){e.preventDefault();activateTab('sec-accounts');});
+  }
+}
+
+/* ── Accounts ── */
+function renderAccounts(){
+  var el=document.getElementById('sp-accounts-list');if(!el)return;
+  var accts=STATE.accounts;
+  el.innerHTML=accts.length?accts.map(function(acc){
+    var statusCls=acc.status==='connected'?'connected':acc.status==='error'?'error':'';
+    return'<div class="sp-account-card '+statusCls+'">'+
+      '<div class="sp-account-avatar">'+esc(acc.avatar_initial||'W')+'</div>'+
+      '<div style="flex:1;">'+
+        '<div class="sp-account-name">'+esc(acc.name)+'</div>'+
+        '<div class="sp-account-handle">'+esc(acc.handle)+'</div>'+
+        '<div class="sp-account-meta-row">'+
+          '<span class="sp-platform-chip">'+esc(acc.platform||'Bluesky')+'</span>'+
+          '<span class="os-badge '+(acc.status==='connected'?'success':'warning')+'">'+esc(acc.status)+'</span>'+
+          (acc.timezone?'<span style="font-family:\'Source Code Pro\',monospace;font-size:10px;color:var(--muted);">TZ: '+esc(acc.timezone)+'</span>':'')+
+          (acc.last_published_at?'<span style="font-family:\'Source Code Pro\',monospace;font-size:10px;color:var(--muted);">Last pub: '+fmtDate(acc.last_published_at)+'</span>':'')+
+        '</div>'+
+        (acc.default_cta?'<div style="font-size:11px;color:var(--muted);margin-top:5px;">CTA: '+esc(acc.default_cta)+'</div>':'')+
+        (acc.default_hashtags?'<div style="font-family:\'Source Code Pro\',monospace;font-size:10px;color:var(--robin-dark);margin-top:2px;">'+esc(acc.default_hashtags)+'</div>':'')+
+      '</div>'+
+      '<div class="sp-account-actions">'+
+        '<button class="os-btn ghost small" data-compose-for="'+esc(acc.id)+'" type="button">Compose</button>'+
+      '</div>'+
+    '</div>';
+  }).join(''):'<div style="font-size:13px;color:var(--muted);padding:10px 0;">No accounts connected yet. Click <strong>Connect Account</strong> above to add your first Bluesky account.</div>';
+
+  el.querySelectorAll('[data-compose-for]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var id=this.getAttribute('data-compose-for');
+      activateTab('sec-composer');
+      var sel=document.getElementById('composer-acct-sel');
+      if(sel){sel.value=id;updateComposerPreview();}
+    });
+  });
+}
+
+/* Connect account form */
+document.getElementById('btn-show-connect-form').addEventListener('click',function(){
+  var form=document.getElementById('sp-connect-form');
+  form.style.display=form.style.display==='none'?'block':'none';
+});
+document.getElementById('btn-cancel-connect').addEventListener('click',function(){
+  document.getElementById('sp-connect-form').style.display='none';
+});
+document.getElementById('btn-connect-account').addEventListener('click', async function(){
+  var name     = document.getElementById('connect-name').value.trim();
+  var handle   = document.getElementById('connect-handle').value.trim();
+  var appPw    = document.getElementById('connect-app-password').value.trim();
+  var cta      = document.getElementById('connect-cta').value.trim();
+  var hashtags = document.getElementById('connect-hashtags').value.trim();
+
+  if(!name||!handle||!appPw){showMsg('connect-msg','Name, handle and app password are required.',false);return;}
+
+  this.textContent='Connecting\u2026';this.disabled=true;
+
+  var res = await api('/api/accounts/connect','POST',{
+    edition_id:       EDITION_ID,
+    name:             name,
+    handle:           handle.replace('@',''),
+    app_password:     appPw,
+    timezone:         'America/Vancouver',
+    default_cta:      cta||STATE.settings.defaultCTA,
+    default_hashtags: hashtags||STATE.settings.defaultHashtags
+  });
+
+  this.textContent='Connect Account';this.disabled=false;
+
+  if(!res.ok){
+    showMsg('connect-msg',res.data&&res.data.error?res.data.error:'Connection failed. Check handle and app password.',false);
+    return;
+  }
+
+  /* Clear form */
+  ['connect-name','connect-handle','connect-app-password','connect-cta','connect-hashtags'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('sp-connect-form').style.display='none';
+
+  /* Reload data */
+  await loadData();
+  renderDashboard();
+  renderAccounts();
+  populateComposerSelect();
+  showBanner('\u2705 Account connected successfully: '+handle,'ok');
+});
+
+/* ── Composer ── */
+function populateComposerSelect(){
+  var sel=document.getElementById('composer-acct-sel');if(!sel)return;
+  var prev=sel.value;
+  sel.innerHTML='<option value="">&#8212; Select account &#8212;</option>';
+  STATE.accounts.forEach(function(acc){
+    var opt=document.createElement('option');
+    opt.value=acc.id;opt.textContent=acc.name+' ('+acc.handle+')';
+    if(acc.id===prev)opt.selected=true;
+    sel.appendChild(opt);
+  });
+}
+
+function updateComposerPreview(){
+  var sel=document.getElementById('composer-acct-sel');
+  var acc=STATE.accounts.find(function(a){return a.id===(sel?sel.value:'');});
+  set('prev-avatar',(acc&&acc.avatar_initial)||'W');
+  set('prev-name',(acc&&acc.name)||EDITION_NAME);
+  set('prev-handle',(acc&&acc.handle)||'@wbnnews.bsky.social');
+}
+
+function renderDraftChips(){
+  var el=document.getElementById('sp-draft-chips');if(!el)return;
+  var drafts=STATE.posts.filter(function(p){return p.status==='draft';});
+  if(!drafts.length){el.innerHTML='<span style="font-size:11px;color:var(--muted);font-family:\'Source Code Pro\',monospace;">No drafts yet.</span>';return;}
+  el.innerHTML=drafts.map(function(d){
+    return'<span class="sp-draft-chip" data-draft-id="'+esc(d.id)+'" title="'+esc(d.title||d.body)+'">'+esc(d.title||(d.body||'').slice(0,30))+'</span>';
+  }).join('');
+  el.querySelectorAll('.sp-draft-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){loadDraft(this.getAttribute('data-draft-id'));});
+  });
+}
+
+function loadDraft(id){
+  var draft=STATE.posts.find(function(p){return p.id===id;});if(!draft)return;
+  var tx=document.getElementById('composer-text'),lx=document.getElementById('composer-link');
+  if(tx){tx.value=draft.body||'';tx.dispatchEvent(new Event('input'));}
+  if(lx){lx.value=draft.link||'';lx.dispatchEvent(new Event('input'));}
+  var sel=document.getElementById('composer-acct-sel');
+  if(sel&&draft.account_id){sel.value=draft.account_id;updateComposerPreview();}
+  showBanner('Draft loaded: '+(draft.title||draft.body.slice(0,40)),'info');
+}
+
+/* Image upload handling */
+var imageUploadZone=document.getElementById('sp-image-upload-zone');
+var imageInput=document.getElementById('sp-image-input');
+
+imageUploadZone.addEventListener('click',function(){imageInput.click();});
+imageInput.addEventListener('change',function(e){
+  var files=Array.from(e.target.files);
+  var remaining=4-COMPOSER.images.length;
+  files=files.slice(0,remaining);
+  files.forEach(function(file){
+    if(file.size>5*1024*1024){showBanner(file.name+' is over 5MB and was skipped.','err');return;}
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      COMPOSER.images.push({file:file,dataUrl:ev.target.result,mimeType:file.type});
+      renderImagePreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+  imageInput.value='';
+});
+
+function renderImagePreviews(){
+  var previews=document.getElementById('sp-image-previews');
+  var label=document.getElementById('sp-image-upload-label');
+  var zone=document.getElementById('sp-image-upload-zone');
+  var prevImages=document.getElementById('prev-images');
+
+  if(!previews)return;
+  previews.innerHTML=COMPOSER.images.map(function(img,i){
+    return'<div class="sp-image-preview">'+
+      '<img src="'+img.dataUrl+'" alt="Image '+(i+1)+'">'+
+      '<button class="sp-image-preview-remove" data-remove-idx="'+i+'" type="button">\u00d7</button>'+
+    '</div>';
+  }).join('');
+
+  previews.querySelectorAll('[data-remove-idx]').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      COMPOSER.images.splice(parseInt(this.getAttribute('data-remove-idx')),1);
+      renderImagePreviews();
+    });
+  });
+
+  var count=COMPOSER.images.length;
+  zone.classList.toggle('has-images',count>0);
+  if(label){label.style.display=count>=4?'none':'block';label.textContent=count>0?'Click to add more images ('+count+'/4)':'&#128247; Click to attach images \u2014 up to 4, max 5MB each';}
+
+  /* Update preview card */
+  if(prevImages){
+    if(count>0){
+      prevImages.style.display='grid';
+      prevImages.innerHTML=COMPOSER.images.map(function(img){return'<img src="'+img.dataUrl+'" alt="">';}).join('');
+    } else {
+      prevImages.style.display='none';
+      prevImages.innerHTML='';
+    }
+  }
+}
+
+/* Composer text / link inputs */
+var txEl=document.getElementById('composer-text');
+var cntEl=document.getElementById('char-counter');
+var lxEl=document.getElementById('composer-link');
+var pbEl=document.getElementById('prev-body');
+var plEl=document.getElementById('prev-link');
+var pltEl=document.getElementById('prev-link-txt');
+
+if(txEl)txEl.addEventListener('input',function(){
+  var val=txEl.value,limit=300,n=val.length;
+  if(cntEl){cntEl.textContent=n+' / '+limit+' (Bluesky)';cntEl.className='sp-char-counter'+(n>limit?' over':n>255?' warn':'');}
+  if(pbEl){pbEl.textContent=val||'Your post text will appear here as you type\u2026';pbEl.className='sp-preview-body'+(val?'':' empty');}
+});
+if(lxEl)lxEl.addEventListener('input',function(){
+  var val=lxEl.value.trim();
+  if(plEl)plEl.className='sp-preview-link'+(val?' show':'');
+  if(pltEl)pltEl.textContent=val;
+});
+var compSelEl=document.getElementById('composer-acct-sel');
+if(compSelEl)compSelEl.addEventListener('change',updateComposerPreview);
+
+/* Save draft */
+document.getElementById('btn-save-draft').addEventListener('click', async function(){
+  var text=(txEl?txEl.value.trim():'');
+  var acctId=(compSelEl?compSelEl.value:'');
+  if(!text){showBanner('Enter post text before saving.','err');return;}
+
+  this.textContent='Saving\u2026';this.disabled=true;
+
+  var res = await api('/api/posts','POST',{
+    edition_id:  EDITION_ID,
+    account_id:  acctId||null,
+    title:       text.slice(0,60),
+    body:        text,
+    link:        lxEl?lxEl.value.trim():'',
+    hashtags:    document.getElementById('composer-tags')?document.getElementById('composer-tags').value.trim():'',
+    status:      'draft'
+  });
+
+  this.textContent='Save Draft';this.disabled=false;
+
+  if(!res.ok){showBanner('Failed to save draft. Check API connection.','err');return;}
+  await loadData();
+  renderDashboard();
+  renderDraftChips();
+  showBanner('\uD83D\uDCDD Draft saved successfully.','ok');
+});
+
+/* Schedule post */
+document.getElementById('btn-schedule').addEventListener('click', async function(){
+  var text=(txEl?txEl.value.trim():'');
+  var acctId=(compSelEl?compSelEl.value:'');
+  if(!text){showBanner('Enter post text before scheduling.','err');return;}
+  if(!acctId){showBanner('Select an account before scheduling.','err');return;}
+
+  var dtStr=prompt('Schedule date and time (YYYY-MM-DD HH:MM):');
+  if(!dtStr)return;
+  var dt=new Date(dtStr);
+  if(isNaN(dt.getTime())){showBanner('Invalid date format. Use YYYY-MM-DD HH:MM','err');return;}
+
+  this.textContent='Scheduling\u2026';this.disabled=true;
+
+  var res = await api('/api/posts','POST',{
+    edition_id:    EDITION_ID,
+    account_id:    acctId,
+    title:         text.slice(0,60),
+    body:          text,
+    link:          lxEl?lxEl.value.trim():'',
+    hashtags:      document.getElementById('composer-tags')?document.getElementById('composer-tags').value.trim():'',
+    status:        'scheduled',
+    scheduled_for: dt.toISOString()
+  });
+
+  this.textContent='\u23F1 Schedule';this.disabled=false;
+
+  if(!res.ok){showBanner('Failed to schedule post.','err');return;}
+  await loadData();
+  renderDashboard();
+  renderDraftChips();
+  showBanner('\u23F1 Post scheduled for '+dt.toLocaleString(),'ok');
+});
+
+/* Publish Now — prompts for app password */
+document.getElementById('btn-publish-now').addEventListener('click',function(){
+  var text=(txEl?txEl.value.trim():'');
+  var acctId=(compSelEl?compSelEl.value:'');
+  if(!text){showBanner('Enter post text before publishing.','err');return;}
+  if(!acctId){showBanner('Select an account before publishing.','err');return;}
+
+  /* Store pending publish info */
+  COMPOSER.pendingAccountId=acctId;
+
+  /* Show app password prompt */
+  document.getElementById('sp-publish-auth').style.display='block';
+  document.getElementById('publish-app-password').focus();
+});
+
+document.getElementById('btn-cancel-publish').addEventListener('click',function(){
+  document.getElementById('sp-publish-auth').style.display='none';
+  document.getElementById('publish-app-password').value='';
+  COMPOSER.pendingAccountId=null;
+  COMPOSER.pendingPostId=null;
+});
+
+document.getElementById('btn-confirm-publish').addEventListener('click', async function(){
+  var appPw=document.getElementById('publish-app-password').value.trim();
+  if(!appPw){showBanner('Enter your Bluesky App Password to publish.','err');return;}
+
+  var text=(txEl?txEl.value.trim():'');
+  var acctId=COMPOSER.pendingAccountId;
+
+  this.textContent='Publishing\u2026';this.disabled=true;
+
+  /* First save as a post record */
+  var saveRes = await api('/api/posts','POST',{
+    edition_id: EDITION_ID,
+    account_id: acctId,
+    title:      text.slice(0,60),
+    body:       text,
+    link:       lxEl?lxEl.value.trim():'',
+    hashtags:   document.getElementById('composer-tags')?document.getElementById('composer-tags').value.trim():'',
+    status:     'publishing'
+  });
+
+  if(!saveRes.ok){
+    this.textContent='Publish';this.disabled=false;
+    showBanner('Failed to create post record.','err');
+    return;
+  }
+
+  var postId=saveRes.data&&saveRes.data[0]?saveRes.data[0].id:null;
+  if(!postId){
+    this.textContent='Publish';this.disabled=false;
+    showBanner('Post record error.','err');
+    return;
+  }
+
+  /* Publish via Worker */
+  var pubRes = await api('/api/publish','POST',{
+    post_id:      postId,
+    account_id:   acctId,
+    app_password: appPw
+  });
+
+  this.textContent='Publish';this.disabled=false;
+  document.getElementById('sp-publish-auth').style.display='none';
+  document.getElementById('publish-app-password').value='';
+  COMPOSER.pendingAccountId=null;
+
+  if(!pubRes.ok){
+    showBanner('\u274C '+((pubRes.data&&pubRes.data.error)||'Publish failed. Check your app password.'),'err');
+    return;
+  }
+
+  /* Clear composer */
+  if(txEl)txEl.value='';
+  if(lxEl)lxEl.value='';
+  if(txEl)txEl.dispatchEvent(new Event('input'));
+  if(lxEl)lxEl.dispatchEvent(new Event('input'));
+  COMPOSER.images=[];
+  renderImagePreviews();
+
+  await loadData();
+  renderDashboard();
+  renderDraftChips();
+  showBanner('\u2705 Published successfully to Bluesky!','ok');
+});
+
+/* ── Queue ── */
+var QCOLS=[
+  {status:'draft',label:'Draft',cls:''},
+  {status:'pending_review',label:'Pending Review',cls:'warning'},
+  {status:'scheduled',label:'Scheduled',cls:'cold'},
+  {status:'publishing',label:'Publishing',cls:'hot'},
+  {status:'published',label:'Published',cls:'success'},
+  {status:'failed',label:'Failed',cls:'danger'}
+];
+
+function renderQueue(){
+  renderQueueBoard();
+  renderQueueTable();
+}
+
+function renderQueueBoard(){
+  var board=document.getElementById('sp-queue-board');if(!board)return;
+  var q=STATE.posts;
+  board.innerHTML=QCOLS.map(function(col){
+    var items=q.filter(function(x){return x.status===col.status;});
+    return'<div class="sp-qcol">'+
+      '<div class="sp-qcol-head"><span class="sp-qcol-label">'+esc(col.label)+'</span><span class="sp-qcol-count">'+items.length+'</span></div>'+
+      '<div class="sp-qcol-body">'+
+      (items.length?items.map(function(item){
+        var acc=getAcctById(item.account_id);
+        return'<div class="sp-qitem"><div class="sp-qitem-title">'+esc(item.title||item.body.slice(0,50))+'</div>'+
+          '<div class="sp-qitem-meta">'+
+          (acc.handle?'<span>'+esc(acc.handle)+'</span>':'')+
+          (item.scheduled_for?'<span>'+fmtDate(item.scheduled_for)+'</span>':'')+
+          (item.source==='corp_push'?'<span class="os-badge cold" style="font-size:8px;">Corp Push</span>':'')+
+          '</div></div>';
+      }).join(''):'<div class="sp-qcol-empty">None</div>')+
+      '</div></div>';
+  }).join('');
+}
+
+function renderQueueTable(){
+  var tbody=document.getElementById('sp-queue-tbody');if(!tbody)return;
+  var q=STATE.posts;
+  if(!q.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;font-size:12px;">No posts yet. Compose your first post to get started.</td></tr>';return;}
+  tbody.innerHTML=q.map(function(item){
+    var acc=getAcctById(item.account_id);
+    var retry=item.status==='failed'?'<button class="os-btn ghost small" data-retry="'+esc(item.id)+'" type="button">Retry</button>':'';
+    var corpBadge=item.source==='corp_push'?'<span class="os-badge cold" style="font-size:8px;margin-left:4px;">Corp</span>':'';
+    return'<tr>'+
+      '<td><strong style="font-size:12px;">'+esc(item.title||(item.body||'').slice(0,50))+corpBadge+'</strong></td>'+
+      '<td style="font-family:\'Source Code Pro\',monospace;font-size:11px;color:var(--robin-dark);">'+esc(acc.handle||'\u2014')+'</td>'+
+      '<td>'+statusBadge(item.status)+'</td>'+
+      '<td style="font-family:\'Source Code Pro\',monospace;font-size:11px;color:var(--muted);">'+fmtDate(item.scheduled_for)+'</td>'+
+      '<td>'+retry+'</td>'+
+    '</tr>';
+  }).join('');
+
+  tbody.querySelectorAll('[data-retry]').forEach(function(btn){
+    btn.addEventListener('click', async function(){
+      var id=this.getAttribute('data-retry');
+      var res=await api('/api/posts/'+id,'PUT',{status:'pending_review'});
+      if(res.ok){await loadData();renderQueue();showBanner('Post moved to Pending Review.','ok');}
+    });
+  });
+}
+
+/* ── Calendar ── */
+function renderCalendar(){
+  var today=new Date(),ws=new Date(today);
+  ws.setDate(today.getDate()-today.getDay()+uiState.calWeekOffset*7);ws.setHours(0,0,0,0);
+  var we=new Date(ws);we.setDate(ws.getDate()+6);
+  var rangeEl=document.getElementById('cal-range');
+  if(rangeEl)rangeEl.textContent=ws.toLocaleDateString('en-CA',{month:'short',day:'numeric'})+' \u2013 '+we.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'});
+  var grid=document.getElementById('sp-cal-grid');if(!grid)return;
+  var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var html=days.map(function(d){return'<div class="sp-cal-day-hdr">'+d+'</div>';}).join('');
+  for(var i=0;i<7;i++){
+    var day=new Date(ws);day.setDate(ws.getDate()+i);
+    var isToday=day.toDateString()===today.toDateString();
+    var dayStr=day.toISOString().slice(0,10);
+    var posts=[];
+    STATE.posts.forEach(function(p){
+      var dateStr=(p.scheduled_for||p.created_at||'').slice(0,10);
+      if(dateStr===dayStr)posts.push({title:p.title||p.body.slice(0,30),cls:p.status==='published'?'published':p.status==='scheduled'?'scheduled':'draft'});
+    });
+    html+='<div class="sp-cal-day'+(isToday?' today':'')+'">'+
+      '<div class="sp-cal-day-num">'+day.getDate()+'</div>'+
+      posts.map(function(p){return'<div class="sp-cal-post '+p.cls+'" title="'+esc(p.title)+'">'+esc(p.title)+'</div>';}).join('')+
+    '</div>';
+  }
+  grid.innerHTML=html;
+}
+document.getElementById('cal-prev').addEventListener('click',function(){uiState.calWeekOffset--;renderCalendar();});
+document.getElementById('cal-next').addEventListener('click',function(){uiState.calWeekOffset++;renderCalendar();});
+
+/* ── Analytics ── */
+function renderAnalytics(){
+  var q=STATE.posts,a=STATE.accounts;
+  set('an-total',q.length);
+  set('an-scheduled',q.filter(function(x){return x.status==='scheduled';}).length);
+  set('an-published',q.filter(function(x){return x.status==='published';}).length);
+  set('an-failed',q.filter(function(x){return x.status==='failed';}).length);
+  set('an-accounts',a.length);
+  var el=document.getElementById('sp-analytics-bars');if(!el)return;
+  if(!a.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);">Connect accounts to see analytics.</div>';return;}
+  var maxP=Math.max.apply(null,a.map(function(acc){return q.filter(function(x){return x.account_id===acc.id&&x.status==='published';}).length;}).concat([1]));
+  el.innerHTML=a.map(function(acc){
+    var pub=q.filter(function(x){return x.account_id===acc.id&&x.status==='published';}).length;
+    return'<div class="sp-bar-row"><div class="sp-bar-label">'+esc(acc.name)+'<span class="sp-bar-handle">'+esc(acc.handle)+'</span></div>'+
+      '<div class="sp-bar-track"><div class="sp-bar-fill" style="width:'+Math.round((pub/maxP)*100)+'%"></div></div>'+
+      '<div class="sp-bar-num">'+pub+'</div></div>';
+  }).join('');
+}
+
+/* ── Admin system (OS pattern — locked) ── */
+var adminWrap=document.getElementById('osAdminWrap');
+document.getElementById('osAdminToggleBtn').addEventListener('click',function(){
+  var open=adminWrap.classList.toggle('open');sessSet('adminOpen',open);
+});
+
+function doLogin(){
+  var pw=document.getElementById('osLoginPassword').value,role=null;
+  if(pw===STATE.passwords.super)role='super';
+  else if(pw===STATE.passwords.admin)role='admin';
+  else if(pw===STATE.passwords.editor)role='editor';
+  if(!role){showMsg('osLoginMsg','Incorrect password.',false);return;}
+  uiState.adminRole=role;sessSet('loggedInRole',role);
+  document.getElementById('osLoginPassword').value='';
+  enterAdmin(role);
+}
+document.getElementById('osLoginBtn').addEventListener('click',doLogin);
+document.getElementById('osLoginPassword').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('osLogoutBtn').addEventListener('click',function(){
+  uiState.adminRole=null;sessSet('loggedInRole',null);
+  document.getElementById('osAdminPanel').style.display='none';
+  document.getElementById('osAdminLoginPanel').style.display='block';
+});
+
+var ADMIN_TABS=[
+  {id:'marketing',   label:'Marketing',  roles:['super','admin','editor']},
+  {id:'academy',     label:'Academy',    roles:['super','admin','editor']},
+  {id:'data',        label:'Data',       roles:['super','admin']},
+  {id:'permissions', label:'Permissions',roles:['super']}
+];
+
+function enterAdmin(role){
+  document.getElementById('osAdminLoginPanel').style.display='none';
+  document.getElementById('osAdminPanel').style.display='block';
+  var pill=document.getElementById('osRolePill');pill.textContent=role;pill.className='os-role-pill '+role;
+  var allowed=ADMIN_TABS.filter(function(t){return t.roles.indexOf(role)!==-1;});
+  document.getElementById('osAdminTabs').innerHTML=allowed.map(function(t,i){
+    return'<button class="os-admin-tab'+(i===0?' active':'')+'" data-admintab="admin-'+t.id+'" type="button">'+t.label+'</button>';
+  }).join('');
+  document.querySelectorAll('#spOS .os-admin-panel').forEach(function(p){p.classList.remove('active');});
+  var first=document.getElementById('admin-'+allowed[0].id);if(first)first.classList.add('active');
+  document.querySelectorAll('#osAdminTabs .os-admin-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      document.querySelectorAll('#osAdminTabs .os-admin-tab').forEach(function(t){t.classList.remove('active');});
+      this.classList.add('active');
+      document.querySelectorAll('#spOS .os-admin-panel').forEach(function(p){p.classList.remove('active');});
+      var p=document.getElementById(this.getAttribute('data-admintab'));if(p)p.classList.add('active');
+      if(this.getAttribute('data-admintab')==='admin-data')renderDataSummary();
+    });
+  });
+  document.getElementById('osDangerZone').style.display=role==='super'?'block':'none';
+  loadAdminFields();
+  renderDataSummary();
+}
+
+function loadAdminFields(){
+  var ti=document.getElementById('osTickerInput');if(ti)ti.value=STATE.settings.ticker||'';
+  var sl=document.getElementById('osSponsorLabelInput');if(sl)sl.value=STATE.settings.sponsorLabel||'';
+  var su=document.getElementById('osSponsorUrlInput');if(su)su.value=STATE.settings.sponsorUrl||'';
+  var cta=document.getElementById('sp-admin-cta');if(cta)cta.value=STATE.settings.defaultCTA||'';
+  var ht=document.getElementById('sp-admin-hashtags');if(ht)ht.value=STATE.settings.defaultHashtags||'';
+}
+
+document.getElementById('osSaveMarketingBtn').addEventListener('click', async function(){
+  STATE.settings.ticker       = document.getElementById('osTickerInput').value;
+  STATE.settings.sponsorLabel = document.getElementById('osSponsorLabelInput').value;
+  STATE.settings.sponsorUrl   = document.getElementById('osSponsorUrlInput').value;
+  sessSet('settings', STATE.settings);
+  applySponsor(); renderTicker();
+  showMsg('osMarketingMsg','Settings saved locally.', true);
+});
+
+document.getElementById('btn-save-sp-settings').addEventListener('click',function(){
+  STATE.settings.defaultCTA      = document.getElementById('sp-admin-cta').value;
+  STATE.settings.defaultHashtags = document.getElementById('sp-admin-hashtags').value;
+  sessSet('settings', STATE.settings);
+  showMsg('osMarketingMsg','Social Publisher settings saved.', true);
+});
+
+function renderDataSummary(){
+  var el=document.getElementById('sp-data-summary');if(!el)return;
+  var q=STATE.posts,a=STATE.accounts;
+  el.innerHTML=
+    'Edition: WBN Global ('+EDITION_SLUG+')<br>'+
+    'Edition ID: '+EDITION_ID+'<br>'+
+    'Worker: '+WORKER_URL+'<br>'+
+    'Accounts: '+a.length+'<br>'+
+    'Total posts: '+q.length+'<br>'+
+    'Published: '+q.filter(function(x){return x.status==='published';}).length+'<br>'+
+    'Scheduled: '+q.filter(function(x){return x.status==='scheduled';}).length+'<br>'+
+    'Drafts: '+q.filter(function(x){return x.status==='draft';}).length;
+}
+
+document.getElementById('btn-export-data').addEventListener('click',function(){
+  var data={edition:'WBN Global',exported:new Date().toISOString(),posts:STATE.posts,accounts:STATE.accounts};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='wbn-global-posts.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+});
+
+document.getElementById('osClearAllBtn').addEventListener('click',function(){
+  if(!confirm('Delete ALL posts and accounts for WBN Global from Supabase? This cannot be undone.'))return;
+  showMsg('osDataMsg','Data deletion requires direct Supabase access. Go to Supabase SQL Editor and run: DELETE FROM posts WHERE edition_id = \''+EDITION_ID+'\'; DELETE FROM social_accounts WHERE edition_id = \''+EDITION_ID+'\';',false);
+});
+
+document.getElementById('osSavePasswordsBtn').addEventListener('click',function(){
+  var s=document.getElementById('osPwSuper').value;
+  var a=document.getElementById('osPwAdmin').value;
+  var ed=document.getElementById('osPwEditor').value;
+  if(s)STATE.passwords.super=s;
+  if(a)STATE.passwords.admin=a;
+  if(ed)STATE.passwords.editor=ed;
+  sessSet('passwords',STATE.passwords);
+  ['osPwSuper','osPwAdmin','osPwEditor'].forEach(function(id){document.getElementById(id).value='';});
+  showMsg('osPermMsg','Passwords updated locally.',true);
+});
+
+document.getElementById('osForceSyncBtn').addEventListener('click', async function(){
+  this.textContent='Testing\u2026';this.disabled=true;
+  var res=await api('/api/health');
+  this.textContent='Test Connection';this.disabled=false;
+  if(res.ok){
+    setSyncBadge('Connected','success');
+    showBanner('\u2705 Worker connected: '+res.data.worker+' '+res.data.version,'ok');
+    await loadData();renderDashboard();
+  } else {
+    setSyncBadge('Error','danger');
+    showBanner('\u274C Worker connection failed.','err');
+  }
+});
+
+/* Quick nav buttons */
+document.getElementById('btn-dash-compose').addEventListener('click',function(){activateTab('sec-composer');});
+document.getElementById('btn-dash-queue').addEventListener('click',function(){activateTab('sec-queue');});
+document.getElementById('btn-dash-calendar').addEventListener('click',function(){activateTab('sec-calendar');});
+
+/* ============================================================
+   INIT — load from Supabase via Worker
+============================================================ */
+async function init(){
+  stampFooter();
+
+  /* Restore local settings */
+  var savedSettings=sessGet('settings',null);
+  if(savedSettings)STATE.settings=Object.assign(STATE.settings,savedSettings);
+  var savedPasswords=sessGet('passwords',null);
+  if(savedPasswords)STATE.passwords=Object.assign(STATE.passwords,savedPasswords);
+
+  applySponsor();
+  renderTicker();
+
+  /* Load live data */
+  var ok=await loadData();
+  if(ok){
+    renderDashboard();
+    populateComposerSelect();
+    renderDraftChips();
+    renderCalendar();
+    updateComposerPreview();
+  }
+
+  /* Restore admin session */
+  if(sessGet('adminOpen',false))adminWrap.classList.add('open');
+  var role=sessGet('loggedInRole',null);
+  if(role){uiState.adminRole=role;enterAdmin(role);}
+}
+
+init();
+
+})();
+</script>
+<!-- GHOST FRAGMENT END -->
+</body>
+</html>
