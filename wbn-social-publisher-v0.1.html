@@ -1,0 +1,2824 @@
+<!DOCTYPE html>
+<!--
+  WBN Social Publisher™ v0.1
+  Built on WBN Operating Platform™ v1.0
+  WBN Cast OS™
+  WBN Style Guide v3.2 | Robin Blue Design System
+  © WBN Cast Network. All rights reserved.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WBN Social Publisher™ v0.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ==============================================
+   WBN OPERATING PLATFORM™ v1.0 — CORE TOKENS
+   WBN Style Guide v3.2 | Robin Blue Design System
+   ============================================== */
+:root {
+  /* Robin Blue Design System */
+  --robin-blue:        #2B7FD4;
+  --robin-blue-light:  #4FA3F7;
+  --robin-blue-dark:   #1A5CA8;
+  --robin-blue-muted:  #D0E8FA;
+
+  /* Neutrals */
+  --os-black:    #0D0F12;
+  --os-dark:     #14181F;
+  --os-surface:  #1C2230;
+  --os-panel:    #222C3C;
+  --os-border:   #2D3A4E;
+  --os-mid:      #3E4F66;
+  --os-muted:    #5A7090;
+  --os-soft:     #8BA4BF;
+  --os-light:    #C8D8E8;
+  --os-white:    #F0F5FA;
+
+  /* Status palette */
+  --status-green:    #22C55E;
+  --status-amber:    #F59E0B;
+  --status-red:      #EF4444;
+  --status-purple:   #A855F7;
+  --status-cyan:     #06B6D4;
+  --status-orange:   #F97316;
+
+  /* Typography */
+  --font-title:   'Oswald', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-utility: 'Source Code Pro', monospace;
+
+  /* Spacing */
+  --sp-xs:  4px;
+  --sp-sm:  8px;
+  --sp-md:  16px;
+  --sp-lg:  24px;
+  --sp-xl:  32px;
+  --sp-2xl: 48px;
+
+  /* Radii */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+
+  /* Transitions */
+  --t-fast: 120ms ease;
+  --t-mid:  220ms ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body {
+  font-family: var(--font-body);
+  background: var(--os-black);
+  color: var(--os-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
+
+/* ==============================================
+   OS LAYER — SPONSOR BAR
+   ============================================== */
+#os-sponsor-bar {
+  background: var(--os-dark);
+  border-bottom: 1px solid var(--os-border);
+  padding: 6px var(--sp-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-utility);
+  font-size: 10px;
+  color: var(--os-muted);
+  letter-spacing: 0.05em;
+}
+#os-sponsor-bar .sponsor-left { display: flex; align-items: center; gap: var(--sp-md); }
+#os-sponsor-bar .sponsor-badge {
+  background: var(--robin-blue);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+#os-sponsor-bar .sponsor-slot { color: var(--os-soft); }
+
+/* ==============================================
+   OS LAYER — TOP NAV
+   ============================================== */
+#os-topnav {
+  background: var(--os-dark);
+  border-bottom: 1px solid var(--robin-blue-dark);
+  padding: 0 var(--sp-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.os-wordmark {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.os-wordmark-text {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--os-white);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.os-wordmark-text span { color: var(--robin-blue); }
+.os-wordmark-badge {
+  font-family: var(--font-utility);
+  font-size: 9px;
+  background: var(--robin-blue-dark);
+  color: var(--robin-blue-light);
+  padding: 2px 7px;
+  border-radius: var(--r-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.os-topnav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+}
+.os-btn {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  padding: 7px 14px;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.os-btn-ghost {
+  background: transparent;
+  color: var(--os-soft);
+  border: 1px solid var(--os-border);
+}
+.os-btn-ghost:hover { background: var(--os-surface); color: var(--os-white); }
+.os-btn-primary {
+  background: var(--robin-blue);
+  color: #fff;
+}
+.os-btn-primary:hover { background: var(--robin-blue-dark); }
+.os-btn-sm {
+  font-size: 10px;
+  padding: 5px 10px;
+}
+.os-btn-danger {
+  background: var(--status-red);
+  color: #fff;
+}
+.os-btn-danger:hover { background: #c0392b; }
+.os-btn-success {
+  background: var(--status-green);
+  color: #fff;
+}
+.os-btn-success:hover { background: #16a34a; }
+.os-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+.os-sync-indicator {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  color: var(--os-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.os-sync-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-green);
+}
+.os-sync-dot.syncing { background: var(--status-amber); animation: pulse 1s infinite; }
+
+/* ==============================================
+   OS LAYER — TAB NAV
+   ============================================== */
+#os-tab-nav {
+  background: var(--os-surface);
+  border-bottom: 1px solid var(--os-border);
+  padding: 0 var(--sp-lg);
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  overflow-x: auto;
+}
+#os-tab-nav::-webkit-scrollbar { height: 3px; }
+#os-tab-nav::-webkit-scrollbar-thumb { background: var(--os-border); }
+.os-tab {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--os-muted);
+  padding: 12px 18px 11px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  transition: color var(--t-fast), border-color var(--t-fast);
+  user-select: none;
+}
+.os-tab:hover { color: var(--os-light); }
+.os-tab.active {
+  color: var(--robin-blue-light);
+  border-bottom-color: var(--robin-blue);
+}
+.os-tab-count {
+  font-family: var(--font-utility);
+  font-size: 9px;
+  background: var(--os-panel);
+  color: var(--os-soft);
+  padding: 1px 5px;
+  border-radius: 10px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.os-tab.active .os-tab-count { background: var(--robin-blue-dark); color: var(--robin-blue-light); }
+
+/* ==============================================
+   OS LAYER — MAIN LAYOUT
+   ============================================== */
+#os-main {
+  flex: 1;
+  padding: var(--sp-xl) var(--sp-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ==============================================
+   OS LAYER — PANELS & CARDS
+   ============================================== */
+.os-panel {
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+}
+.os-card {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-md);
+}
+.os-section-title {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--os-white);
+  margin-bottom: var(--sp-lg);
+}
+.os-section-title span { color: var(--robin-blue); }
+.os-label {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--os-muted);
+  margin-bottom: var(--sp-xs);
+  display: block;
+}
+.os-value {
+  font-family: var(--font-utility);
+  font-size: 13px;
+  color: var(--os-light);
+}
+.os-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-md); }
+.os-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--sp-md); }
+.os-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: var(--sp-md); }
+.os-flex { display: flex; align-items: center; gap: var(--sp-md); }
+.os-flex-between { display: flex; align-items: center; justify-content: space-between; }
+.os-stack { display: flex; flex-direction: column; gap: var(--sp-sm); }
+.os-divider { border: none; border-top: 1px solid var(--os-border); margin: var(--sp-lg) 0; }
+
+/* Input fields */
+.os-input, .os-textarea, .os-select {
+  width: 100%;
+  background: var(--os-dark);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-sm);
+  color: var(--os-light);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+.os-input:focus, .os-textarea:focus, .os-select:focus { border-color: var(--robin-blue); }
+.os-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+.os-select option { background: var(--os-dark); }
+.os-input-group { display: flex; flex-direction: column; gap: var(--sp-xs); }
+
+/* Status badges */
+.os-badge {
+  font-family: var(--font-utility);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.os-badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.badge-green  { background: rgba(34,197,94,.15);  color: var(--status-green); }
+.badge-amber  { background: rgba(245,158,11,.15);  color: var(--status-amber); }
+.badge-red    { background: rgba(239,68,68,.15);   color: var(--status-red); }
+.badge-blue   { background: rgba(43,127,212,.15);  color: var(--robin-blue-light); }
+.badge-purple { background: rgba(168,85,247,.15);  color: var(--status-purple); }
+.badge-cyan   { background: rgba(6,182,212,.15);   color: var(--status-cyan); }
+.badge-gray   { background: rgba(90,112,144,.15);  color: var(--os-soft); }
+
+/* Stat cards */
+.os-stat-card {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-md) var(--sp-lg);
+  position: relative;
+  overflow: hidden;
+}
+.os-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--robin-blue);
+}
+.os-stat-card.accent-green::before  { background: var(--status-green); }
+.os-stat-card.accent-amber::before  { background: var(--status-amber); }
+.os-stat-card.accent-red::before    { background: var(--status-red); }
+.os-stat-card.accent-purple::before { background: var(--status-purple); }
+.os-stat-number {
+  font-family: var(--font-title);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--os-white);
+  line-height: 1;
+  margin: var(--sp-xs) 0 4px;
+}
+.os-stat-label {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--os-muted);
+}
+
+/* Table */
+.os-table { width: 100%; border-collapse: collapse; }
+.os-table th {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--os-muted);
+  text-align: left;
+  padding: var(--sp-sm) var(--sp-md);
+  border-bottom: 1px solid var(--os-border);
+}
+.os-table td {
+  font-size: 13px;
+  color: var(--os-light);
+  padding: 11px var(--sp-md);
+  border-bottom: 1px solid var(--os-border);
+  vertical-align: middle;
+}
+.os-table tr:last-child td { border-bottom: none; }
+.os-table tr:hover td { background: rgba(43,127,212,.04); }
+.os-table td .os-value { font-size: 13px; }
+
+/* Empty state */
+.os-empty {
+  text-align: center;
+  padding: var(--sp-2xl);
+  color: var(--os-muted);
+}
+.os-empty-icon { font-size: 32px; margin-bottom: var(--sp-sm); opacity: .5; }
+.os-empty-text { font-family: var(--font-utility); font-size: 12px; letter-spacing: 0.05em; }
+
+/* Tabs container */
+.os-tab-pane { display: none; }
+.os-tab-pane.active { display: block; }
+
+/* ==============================================
+   OS LAYER — FOOTER / VERSION STAMP
+   ============================================== */
+#os-footer {
+  background: var(--os-dark);
+  border-top: 1px solid var(--os-border);
+  padding: var(--sp-md) var(--sp-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-utility);
+  font-size: 10px;
+  color: var(--os-muted);
+  letter-spacing: 0.05em;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+}
+#os-footer .version-stamp { color: var(--robin-blue-light); }
+#os-footer .os-stamp { color: var(--os-soft); }
+
+/* ==============================================
+   OS LAYER — TOAST NOTIFICATION
+   ============================================== */
+#os-toast-container {
+  position: fixed;
+  bottom: var(--sp-lg);
+  right: var(--sp-lg);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.os-toast {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-left: 3px solid var(--robin-blue);
+  border-radius: var(--r-md);
+  padding: 10px 16px;
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--os-light);
+  min-width: 240px;
+  animation: slideIn 200ms ease;
+}
+.os-toast.toast-success { border-left-color: var(--status-green); }
+.os-toast.toast-error   { border-left-color: var(--status-red); }
+.os-toast.toast-warn    { border-left-color: var(--status-amber); }
+
+/* ==============================================
+   OS LAYER — MODAL
+   ============================================== */
+.os-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.os-modal-overlay.open { display: flex; }
+.os-modal {
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-xl);
+  min-width: 420px;
+  max-width: 680px;
+  width: 94%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+.os-modal-title {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--os-white);
+  margin-bottom: var(--sp-lg);
+}
+.os-modal-close {
+  position: absolute;
+  top: var(--sp-md);
+  right: var(--sp-md);
+  background: transparent;
+  border: none;
+  color: var(--os-muted);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 4px 8px;
+}
+.os-modal-close:hover { color: var(--os-white); }
+
+/* ==============================================
+   OS LAYER — ADMIN PANEL
+   ============================================== */
+#os-admin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  z-index: 1000;
+  display: none;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+#os-admin-overlay.open { display: flex; }
+#os-admin-panel {
+  background: var(--os-dark);
+  border-left: 1px solid var(--os-border);
+  width: 520px;
+  max-width: 96vw;
+  height: 100vh;
+  overflow-y: auto;
+  padding: var(--sp-xl);
+  font-size: 13px;
+}
+#os-admin-panel h2 {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--robin-blue-light);
+  margin-bottom: var(--sp-xl);
+  border-bottom: 1px solid var(--os-border);
+  padding-bottom: var(--sp-md);
+}
+#os-admin-panel h3 {
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--os-soft);
+  margin: var(--sp-xl) 0 var(--sp-md);
+}
+.os-admin-field { margin-bottom: var(--sp-md); }
+.os-admin-field label {
+  display: block;
+  font-family: var(--font-utility);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--os-muted);
+  margin-bottom: 5px;
+}
+.os-admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--os-border);
+  gap: var(--sp-md);
+}
+.os-admin-row:last-child { border-bottom: none; }
+.os-admin-key {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--os-soft);
+  flex: 1;
+}
+.os-admin-val {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--os-light);
+}
+
+/* ==============================================
+   APP — DASHBOARD
+   ============================================== */
+.sp-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-xl);
+}
+.sp-activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sp-activity-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  padding: 9px var(--sp-md);
+  border-radius: var(--r-sm);
+  transition: background var(--t-fast);
+}
+.sp-activity-item:hover { background: var(--os-panel); }
+.sp-activity-time {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  color: var(--os-muted);
+  min-width: 80px;
+}
+.sp-activity-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--os-panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.sp-activity-desc { font-size: 13px; color: var(--os-light); flex: 1; }
+.sp-activity-account { font-family: var(--font-utility); font-size: 10px; color: var(--os-muted); }
+
+/* ==============================================
+   APP — ACCOUNTS
+   ============================================== */
+.sp-account-card {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-md) var(--sp-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-lg);
+  transition: border-color var(--t-mid);
+}
+.sp-account-card:hover { border-color: var(--robin-blue-dark); }
+.sp-account-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--robin-blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--robin-blue-light);
+  flex-shrink: 0;
+}
+.sp-account-info { flex: 1; }
+.sp-account-name {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--os-white);
+  text-transform: uppercase;
+}
+.sp-account-handle {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--robin-blue-light);
+  margin-top: 2px;
+}
+.sp-account-meta {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-top: 6px;
+  align-items: center;
+}
+.sp-account-actions { display: flex; gap: var(--sp-sm); flex-shrink: 0; }
+.sp-platform-chip {
+  font-family: var(--font-utility);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(6,182,212,.12);
+  color: var(--status-cyan);
+  border: 1px solid rgba(6,182,212,.25);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+/* ==============================================
+   APP — COMPOSER
+   ============================================== */
+.sp-composer-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--sp-xl);
+  align-items: start;
+}
+.sp-composer-main {}
+.sp-char-counter {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--os-muted);
+  text-align: right;
+  margin-top: 5px;
+  transition: color var(--t-fast);
+}
+.sp-char-counter.warn { color: var(--status-amber); }
+.sp-char-counter.over { color: var(--status-red); font-weight: 600; }
+.sp-composer-actions {
+  display: flex;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-md);
+  align-items: center;
+}
+.sp-preview-card {
+  background: var(--os-dark);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.sp-preview-header {
+  padding: var(--sp-md);
+  border-bottom: 1px solid var(--os-border);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.sp-preview-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--robin-blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--robin-blue-light);
+}
+.sp-preview-name { font-size: 13px; font-weight: 600; color: var(--os-white); }
+.sp-preview-handle { font-family: var(--font-utility); font-size: 10px; color: var(--os-muted); }
+.sp-preview-body {
+  padding: var(--sp-md);
+  font-size: 14px;
+  color: var(--os-light);
+  line-height: 1.6;
+  min-height: 80px;
+}
+.sp-preview-body.placeholder { color: var(--os-muted); font-style: italic; font-size: 13px; }
+.sp-preview-image-slot {
+  margin: 0 var(--sp-md) var(--sp-md);
+  background: var(--os-surface);
+  border: 1px dashed var(--os-border);
+  border-radius: var(--r-sm);
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-utility);
+  font-size: 10px;
+  color: var(--os-muted);
+  letter-spacing: 0.05em;
+}
+.sp-preview-footer {
+  padding: var(--sp-sm) var(--sp-md);
+  border-top: 1px solid var(--os-border);
+  font-family: var(--font-utility);
+  font-size: 10px;
+  color: var(--os-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+}
+.sp-link-preview {
+  margin: var(--sp-sm) var(--sp-md) var(--sp-md);
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  font-size: 12px;
+  color: var(--os-soft);
+  font-family: var(--font-utility);
+  display: none;
+}
+.sp-link-preview.visible { display: block; }
+
+/* ==============================================
+   APP — QUEUE
+   ============================================== */
+.sp-queue-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-md);
+}
+.sp-queue-column {
+  background: var(--os-surface);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.sp-queue-col-header {
+  padding: var(--sp-sm) var(--sp-md);
+  border-bottom: 1px solid var(--os-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sp-queue-col-title {
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--os-soft);
+}
+.sp-queue-col-count {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  background: var(--os-panel);
+  color: var(--os-muted);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.sp-queue-items { padding: var(--sp-sm); display: flex; flex-direction: column; gap: var(--sp-sm); min-height: 80px; }
+.sp-queue-item {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  cursor: pointer;
+  transition: border-color var(--t-fast);
+}
+.sp-queue-item:hover { border-color: var(--robin-blue-dark); }
+.sp-queue-item-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--os-light);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.sp-queue-item-meta {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  color: var(--os-muted);
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+
+/* ==============================================
+   APP — CALENDAR
+   ============================================== */
+.sp-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-lg);
+}
+.sp-cal-title {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--os-white);
+}
+.sp-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--os-border);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.sp-cal-day-header {
+  background: var(--os-panel);
+  padding: 9px;
+  text-align: center;
+  font-family: var(--font-utility);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--os-muted);
+}
+.sp-cal-day {
+  background: var(--os-surface);
+  min-height: 100px;
+  padding: var(--sp-sm);
+}
+.sp-cal-day.today { background: rgba(43,127,212,.07); }
+.sp-cal-day-num {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--os-muted);
+  margin-bottom: 5px;
+}
+.sp-cal-day.today .sp-cal-day-num {
+  color: var(--robin-blue-light);
+  font-weight: 600;
+}
+.sp-cal-post {
+  font-family: var(--font-utility);
+  font-size: 9px;
+  background: var(--robin-blue-dark);
+  color: var(--robin-blue-light);
+  border-radius: 2px;
+  padding: 2px 5px;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.sp-cal-post.post-draft { background: var(--os-panel); color: var(--os-soft); }
+.sp-cal-post.post-published { background: rgba(34,197,94,.15); color: var(--status-green); }
+
+/* ==============================================
+   APP — ANALYTICS
+   ============================================== */
+.sp-analytics-chart-placeholder {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-md);
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.sp-analytics-chart-placeholder .chart-icon { font-size: 28px; opacity: .35; }
+.sp-analytics-chart-placeholder .chart-label {
+  font-family: var(--font-utility);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--os-muted);
+  text-transform: uppercase;
+}
+.sp-analytics-bar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--os-border);
+}
+.sp-analytics-bar-row:last-child { border-bottom: none; }
+.sp-analytics-bar-label {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--os-soft);
+  min-width: 160px;
+}
+.sp-analytics-bar-track {
+  flex: 1;
+  background: var(--os-panel);
+  border-radius: 2px;
+  height: 8px;
+  overflow: hidden;
+}
+.sp-analytics-bar-fill {
+  height: 100%;
+  background: var(--robin-blue);
+  border-radius: 2px;
+  transition: width .5s ease;
+}
+.sp-analytics-bar-num {
+  font-family: var(--font-utility);
+  font-size: 11px;
+  color: var(--os-light);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* ==============================================
+   APP — GUIDE
+   ============================================== */
+.sp-guide-step {
+  display: flex;
+  gap: var(--sp-lg);
+  padding: var(--sp-lg) 0;
+  border-bottom: 1px solid var(--os-border);
+}
+.sp-guide-step:last-child { border-bottom: none; }
+.sp-guide-num {
+  font-family: var(--font-title);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--robin-blue);
+  opacity: .6;
+  min-width: 48px;
+  line-height: 1;
+}
+.sp-guide-step-title {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--os-white);
+  margin-bottom: 6px;
+}
+.sp-guide-step-body { font-size: 14px; color: var(--os-soft); line-height: 1.7; }
+.sp-guide-flow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin: var(--sp-lg) 0;
+}
+.sp-flow-node {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-sm);
+  padding: 8px 14px;
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--os-light);
+}
+.sp-flow-node.highlight {
+  background: var(--robin-blue-dark);
+  border-color: var(--robin-blue);
+  color: var(--robin-blue-light);
+}
+.sp-flow-arrow { color: var(--os-border); font-size: 16px; }
+
+/* ==============================================
+   APP — ABOUT
+   ============================================== */
+.sp-about-hero {
+  text-align: center;
+  padding: var(--sp-2xl) var(--sp-xl);
+  border-bottom: 1px solid var(--os-border);
+  margin-bottom: var(--sp-xl);
+}
+.sp-about-logo {
+  font-family: var(--font-title);
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--os-white);
+  margin-bottom: var(--sp-sm);
+}
+.sp-about-logo span { color: var(--robin-blue); }
+.sp-about-tagline {
+  font-family: var(--font-utility);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--os-muted);
+  text-transform: uppercase;
+}
+.sp-about-layer {
+  display: flex;
+  gap: var(--sp-md);
+  align-items: center;
+  padding: var(--sp-md);
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-sm);
+  margin-bottom: var(--sp-sm);
+}
+.sp-about-layer-badge {
+  font-family: var(--font-utility);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--robin-blue-dark);
+  color: var(--robin-blue-light);
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.sp-about-layer-desc { font-size: 13px; color: var(--os-soft); }
+
+/* ==============================================
+   OS IMPROVEMENT NOTES — ADMIN SECTION
+   ============================================== */
+.os-improvement-row {
+  background: var(--os-panel);
+  border: 1px solid var(--os-border);
+  border-radius: var(--r-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  margin-bottom: var(--sp-sm);
+  font-family: var(--font-utility);
+  font-size: 11px;
+}
+.os-improvement-feature { color: var(--os-white); font-weight: 600; margin-bottom: 3px; }
+.os-improvement-meta { color: var(--os-muted); display: flex; gap: var(--sp-md); flex-wrap: wrap; }
+
+/* ==============================================
+   ANIMATIONS
+   ============================================== */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     OS LAYER — SPONSOR BAR
+     ============================================================ -->
+<div id="os-sponsor-bar">
+  <div class="sponsor-left">
+    <span class="sponsor-badge">WBN Cast OS™</span>
+    <span class="sponsor-slot" id="osCastMarketingSlot">WBN Social Publisher™ — Your story. Every platform.</span>
+  </div>
+  <span id="osCastDataSlot" style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted);">SOCIAL PUBLISHER™ v0.1 — PHASE 1: BLUESKY FOUNDATION</span>
+</div>
+
+<!-- ============================================================
+     OS LAYER — TOP NAV
+     ============================================================ -->
+<nav id="os-topnav">
+  <div class="os-wordmark">
+    <div class="os-wordmark-text">WBN <span>Social</span> Publisher™</div>
+    <div class="os-wordmark-badge">v0.1 Beta</div>
+  </div>
+  <div class="os-topnav-actions">
+    <div class="os-sync-indicator">
+      <div class="os-sync-dot" id="os-sync-dot"></div>
+      <span id="os-sync-label">Cloud Sync Ready</span>
+    </div>
+    <button class="os-btn os-btn-ghost" id="btn-open-admin">⚙ Admin</button>
+    <button class="os-btn os-btn-primary" id="btn-new-post">+ New Post</button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     OS LAYER — TAB NAVIGATION
+     ============================================================ -->
+<nav id="os-tab-nav">
+  <button class="os-tab active" data-tab="dashboard">Dashboard</button>
+  <button class="os-tab" data-tab="accounts">Accounts <span class="os-tab-count" id="tab-count-accounts">3</span></button>
+  <button class="os-tab" data-tab="composer">Composer</button>
+  <button class="os-tab" data-tab="queue">Queue <span class="os-tab-count" id="tab-count-queue">5</span></button>
+  <button class="os-tab" data-tab="calendar">Calendar</button>
+  <button class="os-tab" data-tab="analytics">Analytics</button>
+  <button class="os-tab" data-tab="guide">Guide</button>
+  <button class="os-tab" data-tab="about">About</button>
+</nav>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main id="os-main">
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <section class="os-tab-pane active" id="pane-dashboard">
+    <div class="os-flex-between" style="margin-bottom:var(--sp-xl)">
+      <h2 class="os-section-title" style="margin:0">Publishing <span>Overview</span></h2>
+      <span class="os-badge badge-green"><span class="os-badge-dot" style="background:var(--status-green)"></span>3 Accounts Active</span>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="sp-kpi-row">
+      <div class="os-stat-card">
+        <div class="os-stat-label">Total Posts</div>
+        <div class="os-stat-number" id="stat-total">24</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">All time</div>
+      </div>
+      <div class="os-stat-card accent-amber">
+        <div class="os-stat-label">Drafts</div>
+        <div class="os-stat-number" id="stat-drafts">3</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">In progress</div>
+      </div>
+      <div class="os-stat-card accent-purple">
+        <div class="os-stat-label">Scheduled</div>
+        <div class="os-stat-number" id="stat-scheduled">2</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Queued up</div>
+      </div>
+      <div class="os-stat-card accent-green">
+        <div class="os-stat-label">Published</div>
+        <div class="os-stat-number" id="stat-published">18</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Sent live</div>
+      </div>
+      <div class="os-stat-card accent-red">
+        <div class="os-stat-label">Failed</div>
+        <div class="os-stat-number" id="stat-failed">1</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Need review</div>
+      </div>
+    </div>
+
+    <div class="os-grid-2" style="gap:var(--sp-xl)">
+      <!-- Recent Activity -->
+      <div>
+        <div class="os-flex-between" style="margin-bottom:var(--sp-md)">
+          <h3 class="os-section-title" style="margin:0;font-size:16px">Activity <span>Log</span></h3>
+        </div>
+        <div class="os-panel" style="padding:var(--sp-sm)">
+          <div class="sp-activity-feed" id="activity-feed">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions + Account Status -->
+      <div class="os-stack">
+        <h3 class="os-section-title" style="margin:0 0 var(--sp-md);font-size:16px">Account <span>Status</span></h3>
+        <div id="dashboard-accounts" class="os-stack">
+          <!-- populated by JS -->
+        </div>
+        <div class="os-panel" style="margin-top:var(--sp-lg)">
+          <div class="os-label">Quick Actions</div>
+          <div class="os-stack" style="margin-top:var(--sp-sm)">
+            <button class="os-btn os-btn-primary" id="btn-dash-compose">Compose New Post</button>
+            <button class="os-btn os-btn-ghost" id="btn-dash-queue">Review Queue</button>
+            <button class="os-btn os-btn-ghost" id="btn-dash-calendar">View Calendar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ACCOUNTS ==================== -->
+  <section class="os-tab-pane" id="pane-accounts">
+    <div class="os-flex-between" style="margin-bottom:var(--sp-xl)">
+      <h2 class="os-section-title" style="margin:0">Social <span>Accounts</span></h2>
+      <button class="os-btn os-btn-primary">+ Add Account</button>
+    </div>
+    <div class="os-stack" id="accounts-list" style="gap:var(--sp-md)">
+      <!-- populated by JS -->
+    </div>
+
+    <hr class="os-divider" />
+
+    <!-- Account Field Reference -->
+    <div>
+      <h3 class="os-section-title" style="font-size:15px;margin-bottom:var(--sp-md)">Account <span>Data Model</span></h3>
+      <div class="os-panel">
+        <div class="os-grid-3" style="gap:var(--sp-lg)">
+          <div>
+            <div class="os-label">Identity Fields</div>
+            <div class="os-stack" style="gap:4px;margin-top:var(--sp-sm)">
+              <div class="os-value">Account Name</div>
+              <div class="os-value">Platform</div>
+              <div class="os-value">Handle</div>
+              <div class="os-value">Default Edition</div>
+            </div>
+          </div>
+          <div>
+            <div class="os-label">Status Fields</div>
+            <div class="os-stack" style="gap:4px;margin-top:var(--sp-sm)">
+              <div class="os-value">Status</div>
+              <div class="os-value">Auth Status</div>
+              <div class="os-value">Last Published</div>
+            </div>
+          </div>
+          <div>
+            <div class="os-label">Settings Fields</div>
+            <div class="os-stack" style="gap:4px;margin-top:var(--sp-sm)">
+              <div class="os-value">Time Zone</div>
+              <div class="os-value">Default CTA</div>
+              <div class="os-value">Default Hashtags</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== COMPOSER ==================== -->
+  <section class="os-tab-pane" id="pane-composer">
+    <div class="os-flex-between" style="margin-bottom:var(--sp-xl)">
+      <h2 class="os-section-title" style="margin:0">Post <span>Composer</span></h2>
+      <div class="os-flex">
+        <span class="os-label" style="margin:0">Target Account:</span>
+        <select class="os-select" style="width:220px" id="composer-account-select">
+          <option value="">— Select account —</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sp-composer-layout">
+      <div class="sp-composer-main">
+        <div class="os-panel">
+          <!-- Master Text -->
+          <div class="os-input-group" style="margin-bottom:var(--sp-md)">
+            <label class="os-label" for="composer-text">Master Post Text</label>
+            <textarea class="os-textarea" id="composer-text" rows="5" placeholder="Write your post here. Character limits are enforced per platform…"></textarea>
+            <div class="sp-char-counter" id="char-counter">0 / 300 (Bluesky)</div>
+          </div>
+
+          <!-- Link Field -->
+          <div class="os-input-group" style="margin-bottom:var(--sp-md)">
+            <label class="os-label" for="composer-link">Link (optional)</label>
+            <input class="os-input" type="url" id="composer-link" placeholder="https://wbncast.com/story/…" />
+          </div>
+
+          <!-- Image Placeholder -->
+          <div class="os-input-group" style="margin-bottom:var(--sp-lg)">
+            <label class="os-label">Image (optional)</label>
+            <div style="
+              background:var(--os-panel);
+              border:1px dashed var(--os-border);
+              border-radius:var(--r-sm);
+              height:100px;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              gap:var(--sp-sm);
+              color:var(--os-muted);
+              font-family:var(--font-utility);
+              font-size:11px;
+              cursor:pointer;
+              letter-spacing:0.05em;
+            " id="image-upload-slot">
+              📷 Click to attach image — max 4 images (Bluesky)
+            </div>
+          </div>
+
+          <!-- Hashtags -->
+          <div class="os-input-group" style="margin-bottom:var(--sp-lg)">
+            <label class="os-label">Hashtags</label>
+            <input class="os-input" id="composer-tags" placeholder="#WBNCast #Vancouver #News" />
+            <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted);margin-top:4px">
+              Default hashtags from account settings are auto-appended.
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="sp-composer-actions">
+            <button class="os-btn os-btn-ghost" id="btn-save-draft">Save Draft</button>
+            <button class="os-btn os-btn-ghost" id="btn-schedule">⏱ Schedule</button>
+            <button class="os-btn os-btn-primary" id="btn-publish-now" disabled title="Bluesky connection coming in v0.2">Publish Now — Coming Soon</button>
+          </div>
+        </div>
+
+        <!-- Draft selector -->
+        <div class="os-panel" style="margin-top:var(--sp-lg)">
+          <div class="os-label">Load Draft</div>
+          <div style="display:flex;gap:var(--sp-sm);margin-top:var(--sp-sm);flex-wrap:wrap" id="draft-chips">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview sidebar -->
+      <div>
+        <div class="os-label" style="margin-bottom:var(--sp-sm)">Platform Preview — Bluesky</div>
+        <div class="sp-preview-card">
+          <div class="sp-preview-header">
+            <div class="sp-preview-avatar" id="preview-avatar">W</div>
+            <div>
+              <div class="sp-preview-name" id="preview-name">WBN Global</div>
+              <div class="sp-preview-handle" id="preview-handle">@wbnglobal.bsky.social</div>
+            </div>
+            <div style="margin-left:auto">
+              <span class="sp-platform-chip">Bluesky</span>
+            </div>
+          </div>
+          <div class="sp-preview-body placeholder" id="preview-body">Your post text will appear here as you type…</div>
+          <div class="sp-link-preview" id="preview-link">🔗 <span id="preview-link-text"></span></div>
+          <div class="sp-preview-image-slot" id="preview-image-slot">No image attached</div>
+          <div class="sp-preview-footer">
+            <span>💬 Reply</span>
+            <span>🔁 Repost</span>
+            <span>❤️ Like</span>
+            <span style="margin-left:auto;font-size:9px;color:var(--os-border)">Preview only</span>
+          </div>
+        </div>
+
+        <div class="os-panel" style="margin-top:var(--sp-lg)">
+          <div class="os-label" style="margin-bottom:var(--sp-sm)">Platform Limits</div>
+          <div id="platform-limits-list" class="os-stack" style="gap:4px">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== QUEUE ==================== -->
+  <section class="os-tab-pane" id="pane-queue">
+    <div class="os-flex-between" style="margin-bottom:var(--sp-xl)">
+      <h2 class="os-section-title" style="margin:0">Publishing <span>Queue</span></h2>
+      <div class="os-flex">
+        <span class="os-badge badge-cyan">Phase 1 — Manual Workflow</span>
+      </div>
+    </div>
+
+    <!-- Full width queue -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr) repeat(3,1fr);gap:var(--sp-md);margin-bottom:var(--sp-xl)" id="queue-board">
+    </div>
+
+    <!-- List view -->
+    <h3 class="os-section-title" style="font-size:15px;margin-bottom:var(--sp-md)">All Queue <span>Items</span></h3>
+    <div class="os-panel" style="padding:0;overflow:hidden">
+      <table class="os-table" id="queue-table">
+        <thead>
+          <tr>
+            <th>Post Excerpt</th>
+            <th>Account</th>
+            <th>Status</th>
+            <th>Scheduled</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="queue-table-body">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== CALENDAR ==================== -->
+  <section class="os-tab-pane" id="pane-calendar">
+    <div class="sp-cal-header">
+      <h2 class="os-section-title" style="margin:0">Publishing <span>Calendar</span></h2>
+      <div class="os-flex">
+        <button class="os-btn os-btn-ghost os-btn-sm" id="cal-prev">← Prev</button>
+        <span class="sp-cal-title" id="cal-range" style="font-size:15px"></span>
+        <button class="os-btn os-btn-ghost os-btn-sm" id="cal-next">Next →</button>
+      </div>
+    </div>
+    <div class="sp-cal-grid" id="calendar-grid">
+      <!-- populated by JS -->
+    </div>
+    <div style="display:flex;gap:var(--sp-md);margin-top:var(--sp-md);flex-wrap:wrap">
+      <div class="os-flex" style="gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--robin-blue-dark);display:inline-block"></span><span style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Scheduled</span></div>
+      <div class="os-flex" style="gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:rgba(34,197,94,.15);display:inline-block"></span><span style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Published</span></div>
+      <div class="os-flex" style="gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--os-panel);display:inline-block"></span><span style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Draft</span></div>
+    </div>
+  </section>
+
+  <!-- ==================== ANALYTICS ==================== -->
+  <section class="os-tab-pane" id="pane-analytics">
+    <div class="os-flex-between" style="margin-bottom:var(--sp-xl)">
+      <h2 class="os-section-title" style="margin:0">Publishing <span>Analytics</span></h2>
+      <span class="os-badge badge-amber">Phase 1 — Internal Metrics Only</span>
+    </div>
+
+    <!-- KPI grid -->
+    <div class="os-grid-4" style="margin-bottom:var(--sp-xl)">
+      <div class="os-stat-card">
+        <div class="os-stat-label">Total Posts</div>
+        <div class="os-stat-number">24</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">All accounts</div>
+      </div>
+      <div class="os-stat-card accent-purple">
+        <div class="os-stat-label">Scheduled</div>
+        <div class="os-stat-number">2</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Awaiting publish</div>
+      </div>
+      <div class="os-stat-card accent-green">
+        <div class="os-stat-label">Published</div>
+        <div class="os-stat-number">18</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Successfully sent</div>
+      </div>
+      <div class="os-stat-card accent-red">
+        <div class="os-stat-label">Failed</div>
+        <div class="os-stat-number">1</div>
+        <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Needs attention</div>
+      </div>
+    </div>
+
+    <div class="os-grid-2" style="gap:var(--sp-xl)">
+      <!-- Posts by Account -->
+      <div class="os-panel">
+        <div class="os-label" style="margin-bottom:var(--sp-md)">Posts by Account</div>
+        <div id="analytics-by-account">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- Posts by Status chart placeholder -->
+      <div class="os-panel">
+        <div class="os-label" style="margin-bottom:var(--sp-md)">Publishing Activity (Last 30 Days)</div>
+        <div class="sp-analytics-chart-placeholder">
+          <div class="chart-icon">📈</div>
+          <div class="chart-label">Platform analytics available in v0.2</div>
+          <div style="font-family:var(--font-utility);font-size:10px;color:var(--os-border)">Requires Bluesky connection</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account count -->
+    <div class="os-panel" style="margin-top:var(--sp-xl)">
+      <div class="os-label" style="margin-bottom:var(--sp-md)">Account Summary</div>
+      <div class="os-grid-3">
+        <div class="os-card">
+          <div class="os-stat-label">Active Accounts</div>
+          <div class="os-stat-number" style="font-size:28px">3</div>
+        </div>
+        <div class="os-card">
+          <div class="os-stat-label">Platforms Connected</div>
+          <div class="os-stat-number" style="font-size:28px">1</div>
+          <div style="font-family:var(--font-utility);font-size:10px;color:var(--robin-blue-light);margin-top:4px">Bluesky</div>
+        </div>
+        <div class="os-card">
+          <div class="os-stat-label">Auth Status</div>
+          <div class="os-stat-number" style="font-size:28px">—</div>
+          <div style="font-family:var(--font-utility);font-size:10px;color:var(--status-amber);margin-top:4px">Pending Phase 2</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GUIDE ==================== -->
+  <section class="os-tab-pane" id="pane-guide">
+    <h2 class="os-section-title">How <span>Social Publisher™</span> Works</h2>
+
+    <div class="os-panel" style="margin-bottom:var(--sp-xl)">
+      <p style="font-size:15px;color:var(--os-soft);line-height:1.8;max-width:760px">
+        WBN Social Publisher™ is built on a simple idea: <strong style="color:var(--os-light)">one story becomes many platform-ready social posts.</strong>
+        Instead of manually rewriting every update for every platform, you write a master post once,
+        and Social Publisher adapts it for each account and network, keeping your brand voice consistent
+        while respecting each platform's character limits, link formats, and media rules.
+      </p>
+    </div>
+
+    <!-- Flow Diagram -->
+    <div class="os-panel" style="margin-bottom:var(--sp-xl)">
+      <div class="os-label" style="margin-bottom:var(--sp-md)">The Publishing Flow</div>
+      <div class="sp-guide-flow">
+        <div class="sp-flow-node highlight">Story / Update</div>
+        <div class="sp-flow-arrow">→</div>
+        <div class="sp-flow-node highlight">Composer</div>
+        <div class="sp-flow-arrow">→</div>
+        <div class="sp-flow-node">Draft</div>
+        <div class="sp-flow-arrow">→</div>
+        <div class="sp-flow-node">Review</div>
+        <div class="sp-flow-arrow">→</div>
+        <div class="sp-flow-node highlight">Queue</div>
+        <div class="sp-flow-arrow">→</div>
+        <div class="sp-flow-node">Scheduled</div>
+        <div class="sp-flow-arrow">→</div>
+        <div class="sp-flow-node highlight">Published</div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="os-panel">
+      <div class="sp-guide-step">
+        <div class="sp-guide-num">01</div>
+        <div>
+          <div class="sp-guide-step-title">Connect Your Accounts</div>
+          <div class="sp-guide-step-body">Add your Bluesky accounts in the Accounts tab. Each account carries its own handle, default hashtags, call-to-action, and time zone. In Phase 2, OAuth authentication will connect directly to the Bluesky AT Protocol.</div>
+        </div>
+      </div>
+      <div class="sp-guide-step">
+        <div class="sp-guide-num">02</div>
+        <div>
+          <div class="sp-guide-step-title">Write in the Composer</div>
+          <div class="sp-guide-step-body">Open the Composer and select a target account. Write your master post text. The live character counter enforces Bluesky's 300-character limit. Add a link and optional image. A real-time Bluesky preview card shows exactly how your post will appear.</div>
+        </div>
+      </div>
+      <div class="sp-guide-step">
+        <div class="sp-guide-num">03</div>
+        <div>
+          <div class="sp-guide-step-title">Save, Schedule, or Publish</div>
+          <div class="sp-guide-step-body">Save a draft to continue later, schedule for a specific time, or publish directly (live in Phase 2). All posts enter the Queue where you can track their status from Draft through to Published or Failed.</div>
+        </div>
+      </div>
+      <div class="sp-guide-step">
+        <div class="sp-guide-num">04</div>
+        <div>
+          <div class="sp-guide-step-title">Track on the Calendar</div>
+          <div class="sp-guide-step-body">The weekly Calendar view shows all scheduled and published posts across accounts. Use it to spot gaps in your publishing rhythm and keep your editorial calendar full.</div>
+        </div>
+      </div>
+      <div class="sp-guide-step">
+        <div class="sp-guide-num">05</div>
+        <div>
+          <div class="sp-guide-step-title">Review Analytics</div>
+          <div class="sp-guide-step-body">Phase 1 Analytics tracks your internal publishing metrics: total posts, scheduled, published, and failed counts by account. Platform-native engagement analytics (likes, reposts, impressions) arrive in Phase 2 with live Bluesky connection.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT ==================== -->
+  <section class="os-tab-pane" id="pane-about">
+    <div class="os-panel">
+      <div class="sp-about-hero">
+        <div class="sp-about-logo">WBN <span>Social</span> Publisher™</div>
+        <div class="sp-about-tagline">The Social Publishing Layer of WBN Cast OS™</div>
+      </div>
+
+      <p style="font-size:14px;color:var(--os-soft);line-height:1.8;max-width:720px;margin:0 auto var(--sp-xl)">
+        WBN Social Publisher™ is a first-party application built on top of the WBN Operating Platform™.
+        It provides WBN Cast Network with a unified, editorial-grade workflow for distributing stories
+        across social platforms — starting with Bluesky and expanding to additional networks in future phases.
+        It is not a general-purpose social media tool. It is purpose-built for the WBN Cast editorial ecosystem.
+      </p>
+
+      <hr class="os-divider" />
+
+      <h3 class="os-section-title" style="font-size:15px;margin-bottom:var(--sp-md)">Platform <span>Architecture</span></h3>
+      <div style="max-width:640px;margin-bottom:var(--sp-xl)">
+        <div class="sp-about-layer">
+          <div class="sp-about-layer-badge">App Layer</div>
+          <div class="sp-about-layer-desc"><strong style="color:var(--os-white)">WBN Social Publisher™ v0.1</strong> — Accounts, Composer, Queue, Calendar, Analytics</div>
+        </div>
+        <div style="text-align:center;font-family:var(--font-utility);font-size:10px;color:var(--os-border);padding:4px 0">▲ runs on ▲</div>
+        <div class="sp-about-layer">
+          <div class="sp-about-layer-badge" style="background:rgba(6,182,212,.12);color:var(--status-cyan);border-color:rgba(6,182,212,.25)">OS Layer</div>
+          <div class="sp-about-layer-desc"><strong style="color:var(--os-white)">WBN Operating Platform™ v1.0</strong> — Tab nav, Admin, Cloud Sync, Sponsor Bar, Role Permissions, Style Guide v3.2</div>
+        </div>
+        <div style="text-align:center;font-family:var(--font-utility);font-size:10px;color:var(--os-border);padding:4px 0">▲ built on ▲</div>
+        <div class="sp-about-layer">
+          <div class="sp-about-layer-badge" style="background:rgba(168,85,247,.12);color:var(--status-purple);border-color:rgba(168,85,247,.25)">Cast OS Layer</div>
+          <div class="sp-about-layer-desc"><strong style="color:var(--os-white)">WBN Cast OS™</strong> — Ghost CMS, Robin Blue Design System, Oswald + Source Code Pro Typography</div>
+        </div>
+      </div>
+
+      <hr class="os-divider" />
+
+      <div class="os-grid-2" style="gap:var(--sp-xl)">
+        <div>
+          <h3 class="os-section-title" style="font-size:15px;margin-bottom:var(--sp-md)">Phase <span>Roadmap</span></h3>
+          <div class="os-stack">
+            <div class="os-card">
+              <div class="os-flex-between">
+                <div class="os-label" style="margin:0">Phase 1 — Foundation</div>
+                <span class="os-badge badge-green">Current</span>
+              </div>
+              <div style="font-size:13px;color:var(--os-soft);margin-top:6px">Product shell, data model, Composer UI, Queue workflow, Calendar, Analytics placeholders. Bluesky-first design. No live connections yet.</div>
+            </div>
+            <div class="os-card">
+              <div class="os-flex-between">
+                <div class="os-label" style="margin:0">Phase 2 — Bluesky Live</div>
+                <span class="os-badge badge-gray">Planned</span>
+              </div>
+              <div style="font-size:13px;color:var(--os-soft);margin-top:6px">AT Protocol OAuth, live publishing, media upload, rich text facets, thread support, Bluesky engagement analytics.</div>
+            </div>
+            <div class="os-card">
+              <div class="os-flex-between">
+                <div class="os-label" style="margin:0">Phase 3 — Multi-Platform</div>
+                <span class="os-badge badge-gray">Future</span>
+              </div>
+              <div style="font-size:13px;color:var(--os-soft);margin-top:6px">Additional platforms, cross-platform post adaptation, platform-specific character limit enforcement, expanded analytics dashboard.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="os-section-title" style="font-size:15px;margin-bottom:var(--sp-md)">Technical <span>Specification</span></h3>
+          <div class="os-panel">
+            <div class="os-admin-row">
+              <div class="os-admin-key">Product</div>
+              <div class="os-admin-val">WBN Social Publisher™</div>
+            </div>
+            <div class="os-admin-row">
+              <div class="os-admin-key">Version</div>
+              <div class="os-admin-val">v0.1 — Phase 1 Beta</div>
+            </div>
+            <div class="os-admin-row">
+              <div class="os-admin-key">Platform</div>
+              <div class="os-admin-val">WBN Operating Platform™ v1.0</div>
+            </div>
+            <div class="os-admin-row">
+              <div class="os-admin-key">Cast OS</div>
+              <div class="os-admin-val">WBN Cast OS™</div>
+            </div>
+            <div class="os-admin-row">
+              <div class="os-admin-key">Design System</div>
+              <div class="os-admin-val">Robin Blue v3.2</div>
+            </div>
+            <div class="os-admin-row">
+              <div class="os-admin-key">Deployment</div>
+              <div class="os-admin-val">Ghost-ready single file</div>
+            </div>
+            <div class="os-admin-row">
+              <div class="os-admin-key">Cloud Sync</div>
+              <div class="os-admin-val">JSONBin cloud-first</div>
+            </div>
+            <div class="os-admin-row">
+              <div class="os-admin-key">First Platform Target</div>
+              <div class="os-admin-val">Bluesky (AT Protocol)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     OS LAYER — FOOTER / VERSION STAMP
+     ============================================================ -->
+<footer id="os-footer">
+  <div>
+    <span class="version-stamp">WBN Social Publisher™ v0.1</span>
+    &nbsp;|&nbsp;
+    <span class="os-stamp">Built on WBN Operating Platform™ v1.0</span>
+    &nbsp;|&nbsp;
+    <span class="os-stamp">WBN Cast OS™</span>
+  </div>
+  <div style="display:flex;gap:var(--sp-lg)">
+    <span>Robin Blue Design System v3.2</span>
+    <span id="footer-timestamp"></span>
+  </div>
+</footer>
+
+<!-- ============================================================
+     OS LAYER — TOAST CONTAINER
+     ============================================================ -->
+<div id="os-toast-container"></div>
+
+<!-- ============================================================
+     OS LAYER — ADMIN PANEL
+     ============================================================ -->
+<div id="os-admin-overlay">
+  <div id="os-admin-panel">
+    <button class="os-modal-close" id="btn-close-admin" style="position:absolute;top:var(--sp-md);right:var(--sp-md)">✕</button>
+    <h2>⚙ WBN OS Admin</h2>
+
+    <!-- Social Publisher Settings -->
+    <h3>Social Publisher™ Settings</h3>
+    <div class="os-admin-field">
+      <label>App Name</label>
+      <input class="os-input" id="admin-app-name" value="WBN Social Publisher™" />
+    </div>
+    <div class="os-admin-field">
+      <label>Default CTA</label>
+      <input class="os-input" id="admin-default-cta" value="Read the full story at wbncast.com" />
+    </div>
+    <div class="os-admin-field">
+      <label>Default Hashtags</label>
+      <input class="os-input" id="admin-default-hashtags" value="#WBNCast #News #Vancouver" />
+    </div>
+    <div class="os-admin-field">
+      <label>Bluesky Char Limit</label>
+      <input class="os-input" type="number" id="admin-bluesky-limit" value="300" />
+    </div>
+
+    <h3>Platform Character Limits</h3>
+    <div id="admin-platform-limits">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Seed Data -->
+    <h3>Seed Data — Accounts</h3>
+    <div id="admin-seed-accounts" class="os-stack" style="gap:var(--sp-sm)">
+      <!-- populated by JS -->
+    </div>
+
+    <h3>Seed Data — Draft Posts</h3>
+    <div id="admin-seed-drafts" class="os-stack" style="gap:var(--sp-sm)">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- OS Cast Data Slot -->
+    <h3>osCastDataSlot</h3>
+    <div class="os-admin-field">
+      <label>Data Ticker Text</label>
+      <input class="os-input" id="admin-data-slot" value="SOCIAL PUBLISHER™ v0.1 — PHASE 1: BLUESKY FOUNDATION" />
+    </div>
+
+    <!-- OS Cast Marketing Slot -->
+    <h3>osCastMarketingSlot</h3>
+    <div class="os-admin-field">
+      <label>Sponsor Bar Message</label>
+      <input class="os-input" id="admin-marketing-slot" value="WBN Social Publisher™ — Your story. Every platform." />
+    </div>
+
+    <!-- OS Improvement Notes -->
+    <h3>📋 OS Improvement Notes</h3>
+    <p style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted);margin-bottom:var(--sp-md);letter-spacing:0.03em">
+      Record features discovered in this product that should be considered for promotion to the WBN Operating Platform™.
+    </p>
+    <div id="os-improvement-list" style="margin-bottom:var(--sp-md)">
+      <!-- populated by JS -->
+    </div>
+    <!-- Add new improvement note form -->
+    <div class="os-panel" style="margin-bottom:var(--sp-md)">
+      <div class="os-label" style="margin-bottom:var(--sp-sm)">+ Log New OS Improvement Note</div>
+      <div class="os-stack" style="gap:var(--sp-sm)">
+        <input class="os-input" id="new-improvement-feature" placeholder="Feature discovered" />
+        <input class="os-input" id="new-improvement-product" placeholder="Product where found" value="WBN Social Publisher™" />
+        <div class="os-grid-2" style="gap:var(--sp-sm)">
+          <select class="os-select" id="new-improvement-os">
+            <option value="yes">Move to OS? → Yes</option>
+            <option value="no">Move to OS? → No</option>
+            <option value="maybe">Move to OS? → Maybe</option>
+          </select>
+          <select class="os-select" id="new-improvement-priority">
+            <option value="high">Priority: High</option>
+            <option value="medium" selected>Priority: Medium</option>
+            <option value="low">Priority: Low</option>
+          </select>
+        </div>
+        <textarea class="os-textarea" id="new-improvement-notes" rows="2" placeholder="Notes…" style="min-height:60px"></textarea>
+        <button class="os-btn os-btn-primary" id="btn-log-improvement">Log Note</button>
+      </div>
+    </div>
+
+    <div class="os-flex" style="gap:var(--sp-sm);margin-top:var(--sp-xl)">
+      <button class="os-btn os-btn-primary" id="btn-save-admin">Save Settings</button>
+      <button class="os-btn os-btn-ghost" id="btn-close-admin-bottom">Close</button>
+    </div>
+
+    <!-- Version Stamp in Admin -->
+    <div style="margin-top:var(--sp-xl);padding-top:var(--sp-md);border-top:1px solid var(--os-border);font-family:var(--font-utility);font-size:9px;color:var(--os-border);letter-spacing:0.05em">
+      WBN Social Publisher™ v0.1 | WBN Operating Platform™ v1.0 | WBN Cast OS™ | Robin Blue v3.2
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCHEDULE MODAL
+     ============================================================ -->
+<div class="os-modal-overlay" id="modal-schedule">
+  <div class="os-modal">
+    <button class="os-modal-close" data-close-modal="modal-schedule">✕</button>
+    <div class="os-modal-title">Schedule Post</div>
+    <div class="os-input-group" style="margin-bottom:var(--sp-md)">
+      <label class="os-label">Scheduled Date & Time</label>
+      <input class="os-input" type="datetime-local" id="schedule-datetime" />
+    </div>
+    <div class="os-input-group" style="margin-bottom:var(--sp-xl)">
+      <label class="os-label">Target Account</label>
+      <select class="os-select" id="schedule-account">
+        <option value="">— Select account —</option>
+      </select>
+    </div>
+    <div class="os-flex">
+      <button class="os-btn os-btn-primary" id="btn-confirm-schedule">Confirm Schedule</button>
+      <button class="os-btn os-btn-ghost" data-close-modal="modal-schedule">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APPLICATION JAVASCRIPT — WBN SOCIAL PUBLISHER™ v0.1
+     Built on WBN Operating Platform™ v1.0
+     All JS inside IIFE. No inline onclick handlers.
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ================================================
+     OS STATE — Extended for Social Publisher™
+     ================================================ */
+  const STATE = {
+    /* OS Platform */
+    appName: 'WBN Social Publisher™',
+    appVersion: 'v0.1',
+    platformVersion: 'WBN Operating Platform™ v1.0',
+    castOS: 'WBN Cast OS™',
+    designSystem: 'Robin Blue v3.2',
+
+    /* OS Settings */
+    osCastDataSlot: 'SOCIAL PUBLISHER™ v0.1 — PHASE 1: BLUESKY FOUNDATION',
+    osCastMarketingSlot: 'WBN Social Publisher™ — Your story. Every platform.',
+
+    /* Social Publisher™ — Social Accounts */
+    socialAccounts: [
+      {
+        id: 'acc-001',
+        name: 'WBN Global',
+        platform: 'Bluesky',
+        handle: '@wbnglobal.bsky.social',
+        status: 'active',
+        defaultEdition: 'WBN Global',
+        timeZone: 'America/Vancouver',
+        lastPublished: '2025-07-01T14:30:00Z',
+        authStatus: 'pending',
+        defaultCTA: 'Read the full story at wbncast.com',
+        defaultHashtags: '#WBNCast #News',
+        avatarInitial: 'W'
+      },
+      {
+        id: 'acc-002',
+        name: 'WBN AI Edition',
+        platform: 'Bluesky',
+        handle: '@wbnai.bsky.social',
+        status: 'active',
+        defaultEdition: 'WBN AI Edition',
+        timeZone: 'America/Vancouver',
+        lastPublished: '2025-06-30T09:15:00Z',
+        authStatus: 'pending',
+        defaultCTA: 'Follow WBN AI Edition for the latest in artificial intelligence.',
+        defaultHashtags: '#WBNCast #AI #Tech',
+        avatarInitial: 'A'
+      },
+      {
+        id: 'acc-003',
+        name: 'Vancouver City News',
+        platform: 'Bluesky',
+        handle: '@vcn.bsky.social',
+        status: 'active',
+        defaultEdition: 'Vancouver City',
+        timeZone: 'America/Vancouver',
+        lastPublished: '2025-07-02T08:00:00Z',
+        authStatus: 'pending',
+        defaultCTA: 'Vancouver news, every day. wbncast.com/vancouver',
+        defaultHashtags: '#Vancouver #YVR #BC',
+        avatarInitial: 'V'
+      }
+    ],
+
+    /* Social Publisher™ — Drafts */
+    socialDrafts: [
+      {
+        id: 'draft-001',
+        title: 'City Council approves housing plan',
+        text: 'Vancouver City Council approved a sweeping new housing development plan last night that could add 40,000 homes over the next decade. #Vancouver #YVR #Housing',
+        link: 'https://wbncast.com/story/vancouver-housing-plan',
+        accountId: 'acc-003',
+        status: 'draft',
+        createdAt: '2025-07-01T20:00:00Z'
+      },
+      {
+        id: 'draft-002',
+        title: 'AI startup raises $120M Series B',
+        text: 'A Vancouver-based AI startup has secured $120M in Series B funding, the largest AI raise in Canada this year. #AI #Tech #Vancouver',
+        link: 'https://wbncast.com/story/ai-startup-series-b',
+        accountId: 'acc-002',
+        status: 'draft',
+        createdAt: '2025-07-02T06:30:00Z'
+      },
+      {
+        id: 'draft-003',
+        title: 'WBN Global Weekly Recap',
+        text: 'This week in global news: trade talks, climate commitments, and a breakthrough in fusion energy. Catch up at wbncast.com. #WBNCast #News',
+        link: 'https://wbncast.com/weekly-recap',
+        accountId: 'acc-001',
+        status: 'draft',
+        createdAt: '2025-07-02T08:00:00Z'
+      }
+    ],
+
+    /* Social Publisher™ — Queue */
+    socialQueue: [
+      {
+        id: 'q-001',
+        draftId: 'draft-001',
+        title: 'City Council approves housing plan',
+        excerpt: 'Vancouver City Council approved a sweeping new housing plan…',
+        accountId: 'acc-003',
+        status: 'scheduled',
+        scheduledFor: '2025-07-03T10:00:00Z'
+      },
+      {
+        id: 'q-002',
+        draftId: 'draft-002',
+        title: 'AI startup raises $120M',
+        excerpt: 'A Vancouver-based AI startup has secured $120M…',
+        accountId: 'acc-002',
+        status: 'pending_review',
+        scheduledFor: null
+      },
+      {
+        id: 'q-003',
+        draftId: null,
+        title: 'Port of Vancouver cargo volume up 12%',
+        excerpt: 'Cargo volumes at the Port of Vancouver rose 12% in June…',
+        accountId: 'acc-001',
+        status: 'published',
+        scheduledFor: '2025-07-01T09:00:00Z'
+      },
+      {
+        id: 'q-004',
+        draftId: null,
+        title: 'SkyTrain expansion funding confirmed',
+        excerpt: 'Federal and provincial funding for the Broadway SkyTrain extension…',
+        accountId: 'acc-003',
+        status: 'published',
+        scheduledFor: '2025-06-30T11:00:00Z'
+      },
+      {
+        id: 'q-005',
+        draftId: null,
+        title: 'Global AI regulation summit recap',
+        excerpt: 'Leaders from 28 nations met in Geneva to discuss AI governance…',
+        accountId: 'acc-002',
+        status: 'failed',
+        scheduledFor: '2025-06-29T14:00:00Z'
+      }
+    ],
+
+    /* Social Publisher™ — Settings */
+    socialSettings: {
+      defaultCTA: 'Read the full story at wbncast.com',
+      defaultHashtags: '#WBNCast #News #Vancouver',
+      platformLimits: {
+        'Bluesky':   300,
+        'Twitter/X': 280,
+        'Mastodon':  500,
+        'Threads':   500
+      }
+    },
+
+    /* Social Publisher™ — Activity Log */
+    socialActivityLog: [
+      { time: '08:14 AM', icon: '✅', desc: 'Post published to Vancouver City News', account: '@vcn.bsky.social', type: 'published' },
+      { time: '08:00 AM', icon: '📝', desc: 'Draft created: WBN Global Weekly Recap', account: '@wbnglobal.bsky.social', type: 'draft' },
+      { time: 'Yesterday', icon: '⏱',  desc: 'Scheduled: City Council housing plan', account: '@vcn.bsky.social', type: 'scheduled' },
+      { time: 'Yesterday', icon: '✅', desc: 'Post published to WBN Global', account: '@wbnglobal.bsky.social', type: 'published' },
+      { time: '2d ago',   icon: '❌', desc: 'Failed: Global AI regulation summit recap', account: '@wbnai.bsky.social', type: 'failed' },
+      { time: '2d ago',   icon: '✅', desc: 'Post published to WBN AI Edition', account: '@wbnai.bsky.social', type: 'published' }
+    ],
+
+    /* OS Improvement Notes */
+    osImprovementNotes: [
+      {
+        id: 'imp-001',
+        feature: 'Toast notification system',
+        product: 'WBN Social Publisher™',
+        moveToOS: 'yes',
+        priority: 'high',
+        notes: 'Generic toast pattern works for any WBN app. Add to OS layer as os-toast API.'
+      },
+      {
+        id: 'imp-002',
+        feature: 'Character counter component',
+        product: 'WBN Social Publisher™',
+        moveToOS: 'maybe',
+        priority: 'medium',
+        notes: 'Char counter is Social Publisher-specific for now. Consider abstracting if a Cast editor needs it.'
+      },
+      {
+        id: 'imp-003',
+        feature: 'Activity log pattern',
+        product: 'WBN Social Publisher™',
+        moveToOS: 'yes',
+        priority: 'medium',
+        notes: 'Timeline-style activity feed pattern is reusable across WBN Cast products.'
+      }
+    ],
+
+    /* Active tab */
+    activeTab: 'dashboard',
+
+    /* Composer state */
+    composerText: '',
+    composerAccountId: '',
+    composerLink: '',
+
+    /* Calendar state */
+    calendarWeekOffset: 0
+  };
+
+  /* ================================================
+     OS UTILITY — Show Toast
+     ================================================ */
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('os-toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'os-toast' + (type === 'success' ? ' toast-success' : type === 'error' ? ' toast-error' : type === 'warn' ? ' toast-warn' : '');
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(function() {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 300ms';
+      setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 320);
+    }, 3000);
+  }
+
+  /* ================================================
+     OS UTILITY — Cloud Sync indicator
+     ================================================ */
+  function setSyncStatus(syncing) {
+    const dot = document.getElementById('os-sync-dot');
+    const label = document.getElementById('os-sync-label');
+    if (syncing) {
+      dot.classList.add('syncing');
+      label.textContent = 'Syncing…';
+    } else {
+      dot.classList.remove('syncing');
+      label.textContent = 'Cloud Sync Ready';
+    }
+  }
+
+  function simulateSync(cb) {
+    setSyncStatus(true);
+    setTimeout(function() { setSyncStatus(false); if (cb) cb(); }, 900);
+  }
+
+  /* ================================================
+     OS LAYER — TAB NAVIGATION
+     ================================================ */
+  function initTabs() {
+    const tabs = document.querySelectorAll('.os-tab');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const name = tab.dataset.tab;
+        activateTab(name);
+      });
+    });
+  }
+
+  function activateTab(name) {
+    STATE.activeTab = name;
+    document.querySelectorAll('.os-tab').forEach(function(t) {
+      t.classList.toggle('active', t.dataset.tab === name);
+    });
+    document.querySelectorAll('.os-tab-pane').forEach(function(p) {
+      p.classList.toggle('active', p.id === 'pane-' + name);
+    });
+    if (name === 'calendar') renderCalendar();
+    if (name === 'analytics') renderAnalytics();
+    if (name === 'queue') renderQueue();
+  }
+
+  /* ================================================
+     OS LAYER — ADMIN PANEL
+     ================================================ */
+  function initAdmin() {
+    document.getElementById('btn-open-admin').addEventListener('click', openAdmin);
+    document.getElementById('btn-close-admin').addEventListener('click', closeAdmin);
+    document.getElementById('btn-close-admin-bottom').addEventListener('click', closeAdmin);
+    document.getElementById('os-admin-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeAdmin();
+    });
+    document.getElementById('btn-save-admin').addEventListener('click', saveAdminSettings);
+    document.getElementById('btn-log-improvement').addEventListener('click', logImprovementNote);
+  }
+
+  function openAdmin() {
+    document.getElementById('os-admin-overlay').classList.add('open');
+    populateAdminPanel();
+  }
+  function closeAdmin() {
+    document.getElementById('os-admin-overlay').classList.remove('open');
+  }
+
+  function populateAdminPanel() {
+    /* Platform limits */
+    const limitsEl = document.getElementById('admin-platform-limits');
+    limitsEl.innerHTML = '';
+    Object.entries(STATE.socialSettings.platformLimits).forEach(function(entry) {
+      const row = document.createElement('div');
+      row.className = 'os-admin-row';
+      row.innerHTML = '<div class="os-admin-key">' + entry[0] + '</div>' +
+        '<div class="os-admin-val">' + entry[1] + ' chars</div>';
+      limitsEl.appendChild(row);
+    });
+
+    /* Seed accounts */
+    const accEl = document.getElementById('admin-seed-accounts');
+    accEl.innerHTML = '';
+    STATE.socialAccounts.forEach(function(acc) {
+      const row = document.createElement('div');
+      row.className = 'os-improvement-row';
+      row.innerHTML = '<div class="os-improvement-feature">' + acc.name + ' — ' + acc.handle + '</div>' +
+        '<div class="os-improvement-meta"><span>Platform: ' + acc.platform + '</span><span>Status: ' + acc.status + '</span><span>TZ: ' + acc.timeZone + '</span></div>';
+      accEl.appendChild(row);
+    });
+
+    /* Seed drafts */
+    const draftEl = document.getElementById('admin-seed-drafts');
+    draftEl.innerHTML = '';
+    STATE.socialDrafts.forEach(function(d) {
+      const row = document.createElement('div');
+      row.className = 'os-improvement-row';
+      row.innerHTML = '<div class="os-improvement-feature">' + d.title + '</div>' +
+        '<div class="os-improvement-meta"><span>Account: ' + getAccountById(d.accountId).handle + '</span><span>Status: ' + d.status + '</span></div>';
+      draftEl.appendChild(row);
+    });
+
+    /* Improvement notes */
+    renderImprovementNotes();
+  }
+
+  function saveAdminSettings() {
+    const appName = document.getElementById('admin-app-name').value.trim();
+    const cta = document.getElementById('admin-default-cta').value.trim();
+    const hashtags = document.getElementById('admin-default-hashtags').value.trim();
+    const bskyLimit = parseInt(document.getElementById('admin-bluesky-limit').value) || 300;
+    const dataSlot = document.getElementById('admin-data-slot').value.trim();
+    const marketingSlot = document.getElementById('admin-marketing-slot').value.trim();
+
+    if (appName) STATE.appName = appName;
+    if (cta) STATE.socialSettings.defaultCTA = cta;
+    if (hashtags) STATE.socialSettings.defaultHashtags = hashtags;
+    STATE.socialSettings.platformLimits['Bluesky'] = bskyLimit;
+    if (dataSlot) {
+      STATE.osCastDataSlot = dataSlot;
+      document.getElementById('osCastDataSlot').textContent = dataSlot;
+    }
+    if (marketingSlot) {
+      STATE.osCastMarketingSlot = marketingSlot;
+      document.getElementById('osCastMarketingSlot').textContent = marketingSlot;
+    }
+
+    simulateSync(function() {
+      showToast('Admin settings saved.', 'success');
+    });
+  }
+
+  function renderImprovementNotes() {
+    const el = document.getElementById('os-improvement-list');
+    el.innerHTML = '';
+    STATE.osImprovementNotes.forEach(function(note) {
+      const row = document.createElement('div');
+      row.className = 'os-improvement-row';
+      const moveBadge = note.moveToOS === 'yes' ? 'badge-green' : note.moveToOS === 'no' ? 'badge-gray' : 'badge-amber';
+      const priorityBadge = note.priority === 'high' ? 'badge-red' : note.priority === 'medium' ? 'badge-amber' : 'badge-gray';
+      row.innerHTML = '<div class="os-improvement-feature">' + note.feature + '</div>' +
+        '<div class="os-improvement-meta">' +
+        '<span>' + note.product + '</span>' +
+        '<span class="os-badge ' + moveBadge + '" style="font-size:8px;padding:1px 5px">Move to OS: ' + note.moveToOS + '</span>' +
+        '<span class="os-badge ' + priorityBadge + '" style="font-size:8px;padding:1px 5px">' + note.priority + '</span>' +
+        '</div>' +
+        (note.notes ? '<div style="color:var(--os-muted);font-size:10px;margin-top:4px">' + note.notes + '</div>' : '');
+      el.appendChild(row);
+    });
+    if (!STATE.osImprovementNotes.length) {
+      el.innerHTML = '<div class="os-empty"><div class="os-empty-text">No improvement notes logged yet.</div></div>';
+    }
+  }
+
+  function logImprovementNote() {
+    const feature = document.getElementById('new-improvement-feature').value.trim();
+    if (!feature) { showToast('Please enter a feature name.', 'warn'); return; }
+    STATE.osImprovementNotes.push({
+      id: 'imp-' + Date.now(),
+      feature: feature,
+      product: document.getElementById('new-improvement-product').value.trim() || 'WBN Social Publisher™',
+      moveToOS: document.getElementById('new-improvement-os').value,
+      priority: document.getElementById('new-improvement-priority').value,
+      notes: document.getElementById('new-improvement-notes').value.trim()
+    });
+    document.getElementById('new-improvement-feature').value = '';
+    document.getElementById('new-improvement-notes').value = '';
+    renderImprovementNotes();
+    showToast('OS improvement note logged.', 'success');
+  }
+
+  /* ================================================
+     OS LAYER — MODAL MANAGEMENT
+     ================================================ */
+  function initModals() {
+    document.querySelectorAll('[data-close-modal]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const id = btn.dataset.closeModal;
+        document.getElementById(id).classList.remove('open');
+      });
+    });
+    document.querySelectorAll('.os-modal-overlay').forEach(function(overlay) {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.classList.remove('open');
+      });
+    });
+  }
+
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+
+  /* ================================================
+     OS UTILITY — Account lookup
+     ================================================ */
+  function getAccountById(id) {
+    return STATE.socialAccounts.find(function(a) { return a.id === id; }) || { name: '—', handle: '—', avatarInitial: '?', platform: '—' };
+  }
+
+  function getStatusBadgeClass(status) {
+    const map = {
+      'draft':          'badge-gray',
+      'pending_review': 'badge-amber',
+      'scheduled':      'badge-purple',
+      'publishing':     'badge-blue',
+      'published':      'badge-green',
+      'failed':         'badge-red'
+    };
+    return map[status] || 'badge-gray';
+  }
+
+  function formatStatusLabel(status) {
+    return status.replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  /* ================================================
+     RENDER — DASHBOARD
+     ================================================ */
+  function renderDashboard() {
+    /* Stats */
+    const drafts = STATE.socialQueue.filter(function(q) { return q.status === 'draft'; }).length +
+                   STATE.socialDrafts.length;
+    const scheduled = STATE.socialQueue.filter(function(q) { return q.status === 'scheduled'; }).length;
+    const published = STATE.socialQueue.filter(function(q) { return q.status === 'published'; }).length;
+    const failed    = STATE.socialQueue.filter(function(q) { return q.status === 'failed'; }).length;
+    const total = STATE.socialQueue.length + STATE.socialDrafts.filter(function(d) {
+      return !STATE.socialQueue.find(function(q) { return q.draftId === d.id; });
+    }).length;
+
+    document.getElementById('stat-total').textContent = total || 24;
+    document.getElementById('stat-drafts').textContent = STATE.socialDrafts.length;
+    document.getElementById('stat-scheduled').textContent = scheduled;
+    document.getElementById('stat-published').textContent = published;
+    document.getElementById('stat-failed').textContent = failed;
+
+    /* Activity Feed */
+    const feedEl = document.getElementById('activity-feed');
+    feedEl.innerHTML = '';
+    STATE.socialActivityLog.forEach(function(item) {
+      const el = document.createElement('div');
+      el.className = 'sp-activity-item';
+      el.innerHTML = '<div class="sp-activity-time">' + item.time + '</div>' +
+        '<div class="sp-activity-icon">' + item.icon + '</div>' +
+        '<div>' +
+          '<div class="sp-activity-desc">' + item.desc + '</div>' +
+          '<div class="sp-activity-account">' + item.account + '</div>' +
+        '</div>';
+      feedEl.appendChild(el);
+    });
+
+    /* Account Status in dashboard */
+    const accEl = document.getElementById('dashboard-accounts');
+    accEl.innerHTML = '';
+    STATE.socialAccounts.forEach(function(acc) {
+      const card = document.createElement('div');
+      card.className = 'os-card os-flex-between';
+      card.innerHTML =
+        '<div class="os-flex" style="gap:var(--sp-sm)">' +
+          '<div style="width:32px;height:32px;border-radius:50%;background:var(--robin-blue-dark);display:flex;align-items:center;justify-content:center;font-family:var(--font-title);font-size:13px;font-weight:700;color:var(--robin-blue-light)">' + acc.avatarInitial + '</div>' +
+          '<div>' +
+            '<div style="font-size:12px;font-weight:600;color:var(--os-light)">' + acc.name + '</div>' +
+            '<div style="font-family:var(--font-utility);font-size:10px;color:var(--robin-blue-light)">' + acc.handle + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<span class="os-badge badge-amber"><span class="os-badge-dot" style="background:var(--status-amber)"></span>Auth Pending</span>';
+      accEl.appendChild(card);
+    });
+  }
+
+  /* ================================================
+     RENDER — ACCOUNTS
+     ================================================ */
+  function renderAccounts() {
+    const el = document.getElementById('accounts-list');
+    el.innerHTML = '';
+    STATE.socialAccounts.forEach(function(acc) {
+      const card = document.createElement('div');
+      card.className = 'sp-account-card';
+      card.innerHTML =
+        '<div class="sp-account-avatar">' + acc.avatarInitial + '</div>' +
+        '<div class="sp-account-info">' +
+          '<div class="sp-account-name">' + acc.name + '</div>' +
+          '<div class="sp-account-handle">' + acc.handle + '</div>' +
+          '<div class="sp-account-meta">' +
+            '<span class="sp-platform-chip">' + acc.platform + '</span>' +
+            '<span class="os-badge badge-green"><span class="os-badge-dot" style="background:var(--status-green)"></span>' + acc.status + '</span>' +
+            '<span class="os-badge badge-amber">Auth Pending</span>' +
+            '<span style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">TZ: ' + acc.timeZone + '</span>' +
+            '<span style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">Last pub: ' + formatDate(acc.lastPublished) + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="sp-account-actions">' +
+          '<button class="os-btn os-btn-ghost os-btn-sm" data-action="edit-account" data-id="' + acc.id + '">Edit</button>' +
+          '<button class="os-btn os-btn-ghost os-btn-sm" data-action="compose-account" data-id="' + acc.id + '">Compose</button>' +
+        '</div>';
+      el.appendChild(card);
+    });
+
+    /* Account detail interactions */
+    el.querySelectorAll('[data-action="compose-account"]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        STATE.composerAccountId = btn.dataset.id;
+        activateTab('composer');
+        updateComposerAccountSelect();
+        showToast('Composer opened for ' + getAccountById(btn.dataset.id).name, 'success');
+      });
+    });
+  }
+
+  /* ================================================
+     RENDER — COMPOSER
+     ================================================ */
+  function initComposer() {
+    populateComposerAccountSelect();
+    populateDraftChips();
+
+    const textEl = document.getElementById('composer-text');
+    const counterEl = document.getElementById('char-counter');
+    const linkEl = document.getElementById('composer-link');
+    const previewBody = document.getElementById('preview-body');
+    const previewLink = document.getElementById('preview-link');
+    const previewLinkText = document.getElementById('preview-link-text');
+
+    textEl.addEventListener('input', function() {
+      const val = textEl.value;
+      const limit = STATE.socialSettings.platformLimits['Bluesky'];
+      const count = val.length;
+      counterEl.textContent = count + ' / ' + limit + ' (Bluesky)';
+      counterEl.className = 'sp-char-counter' + (count > limit ? ' over' : count > limit * 0.85 ? ' warn' : '');
+      previewBody.textContent = val || 'Your post text will appear here as you type…';
+      previewBody.className = 'sp-preview-body' + (val ? '' : ' placeholder');
+    });
+
+    linkEl.addEventListener('input', function() {
+      const val = linkEl.value.trim();
+      previewLink.className = 'sp-link-preview' + (val ? ' visible' : '');
+      previewLinkText.textContent = val;
+    });
+
+    document.getElementById('composer-account-select').addEventListener('change', function() {
+      STATE.composerAccountId = this.value;
+      updateComposerPreviewAccount();
+    });
+
+    document.getElementById('btn-save-draft').addEventListener('click', saveDraft);
+    document.getElementById('btn-schedule').addEventListener('click', function() {
+      populateScheduleModal();
+      openModal('modal-schedule');
+    });
+    document.getElementById('btn-confirm-schedule').addEventListener('click', confirmSchedule);
+    document.getElementById('btn-new-post').addEventListener('click', function() {
+      clearComposer();
+      activateTab('composer');
+    });
+
+    /* Platform limits */
+    const limitsEl = document.getElementById('platform-limits-list');
+    limitsEl.innerHTML = '';
+    Object.entries(STATE.socialSettings.platformLimits).forEach(function(entry) {
+      const row = document.createElement('div');
+      row.className = 'os-admin-row';
+      row.innerHTML = '<span class="os-admin-key">' + entry[0] + '</span><span class="os-admin-val">' + entry[1] + ' chars</span>';
+      limitsEl.appendChild(row);
+    });
+  }
+
+  function populateComposerAccountSelect() {
+    const sel = document.getElementById('composer-account-select');
+    sel.innerHTML = '<option value="">— Select account —</option>';
+    STATE.socialAccounts.forEach(function(acc) {
+      const opt = document.createElement('option');
+      opt.value = acc.id;
+      opt.textContent = acc.name + ' (' + acc.handle + ')';
+      sel.appendChild(opt);
+    });
+  }
+
+  function populateScheduleModal() {
+    const sel = document.getElementById('schedule-account');
+    sel.innerHTML = '<option value="">— Select account —</option>';
+    STATE.socialAccounts.forEach(function(acc) {
+      const opt = document.createElement('option');
+      opt.value = acc.id;
+      opt.textContent = acc.name + ' (' + acc.handle + ')';
+      if (acc.id === STATE.composerAccountId) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    /* Set default to next hour */
+    const d = new Date();
+    d.setHours(d.getHours() + 1, 0, 0, 0);
+    document.getElementById('schedule-datetime').value = d.toISOString().slice(0, 16);
+  }
+
+  function updateComposerAccountSelect() {
+    const sel = document.getElementById('composer-account-select');
+    sel.value = STATE.composerAccountId;
+    updateComposerPreviewAccount();
+  }
+
+  function updateComposerPreviewAccount() {
+    const acc = getAccountById(STATE.composerAccountId);
+    document.getElementById('preview-avatar').textContent = acc.avatarInitial || '?';
+    document.getElementById('preview-name').textContent = acc.name || 'WBN Global';
+    document.getElementById('preview-handle').textContent = acc.handle || '@wbnglobal.bsky.social';
+  }
+
+  function populateDraftChips() {
+    const el = document.getElementById('draft-chips');
+    el.innerHTML = '';
+    STATE.socialDrafts.forEach(function(d) {
+      const btn = document.createElement('button');
+      btn.className = 'os-btn os-btn-ghost os-btn-sm';
+      btn.textContent = d.title;
+      btn.dataset.draftId = d.id;
+      btn.addEventListener('click', function() { loadDraft(d.id); });
+      el.appendChild(btn);
+    });
+    if (!STATE.socialDrafts.length) {
+      el.innerHTML = '<span style="font-family:var(--font-utility);font-size:10px;color:var(--os-muted)">No drafts saved yet.</span>';
+    }
+  }
+
+  function loadDraft(id) {
+    const draft = STATE.socialDrafts.find(function(d) { return d.id === id; });
+    if (!draft) return;
+    document.getElementById('composer-text').value = draft.text;
+    document.getElementById('composer-link').value = draft.link || '';
+    document.getElementById('composer-text').dispatchEvent(new Event('input'));
+    document.getElementById('composer-link').dispatchEvent(new Event('input'));
+    STATE.composerAccountId = draft.accountId;
+    updateComposerAccountSelect();
+    showToast('Draft loaded: ' + draft.title, 'success');
+  }
+
+  function saveDraft() {
+    const text = document.getElementById('composer-text').value.trim();
+    if (!text) { showToast('Please enter post text before saving.', 'warn'); return; }
+    const title = text.slice(0, 40) + (text.length > 40 ? '…' : '');
+    const draft = {
+      id: 'draft-' + Date.now(),
+      title: title,
+      text: text,
+      link: document.getElementById('composer-link').value.trim(),
+      accountId: STATE.composerAccountId || STATE.socialAccounts[0].id,
+      status: 'draft',
+      createdAt: new Date().toISOString()
+    };
+    STATE.socialDrafts.push(draft);
+    populateDraftChips();
+    simulateSync(function() {
+      showToast('Draft saved: ' + title, 'success');
+      STATE.socialActivityLog.unshift({ time: 'Just now', icon: '📝', desc: 'Draft saved: ' + title, account: getAccountById(draft.accountId).handle, type: 'draft' });
+      renderDashboard();
+    });
+  }
+
+  function confirmSchedule() {
+    const text = document.getElementById('composer-text').value.trim();
+    if (!text) { showToast('Please enter post text.', 'warn'); return; }
+    const accountId = document.getElementById('schedule-account').value;
+    if (!accountId) { showToast('Please select an account.', 'warn'); return; }
+    const dt = document.getElementById('schedule-datetime').value;
+    if (!dt) { showToast('Please select a date and time.', 'warn'); return; }
+    const title = text.slice(0, 40) + (text.length > 40 ? '…' : '');
+    STATE.socialQueue.push({
+      id: 'q-' + Date.now(),
+      draftId: null,
+      title: title,
+      excerpt: text.slice(0, 80) + '…',
+      accountId: accountId,
+      status: 'scheduled',
+      scheduledFor: new Date(dt).toISOString()
+    });
+    document.getElementById('modal-schedule').classList.remove('open');
+    simulateSync(function() {
+      showToast('Post scheduled for ' + new Date(dt).toLocaleString(), 'success');
+      STATE.socialActivityLog.unshift({ time: 'Just now', icon: '⏱', desc: 'Scheduled: ' + title, account: getAccountById(accountId).handle, type: 'scheduled' });
+      renderDashboard();
+      updateQueueTabCount();
+    });
+  }
+
+  function clearComposer() {
+    document.getElementById('composer-text').value = '';
+    document.getElementById('composer-link').value = '';
+    document.getElementById('composer-text').dispatchEvent(new Event('input'));
+    document.getElementById('composer-link').dispatchEvent(new Event('input'));
+  }
+
+  /* ================================================
+     RENDER — QUEUE
+     ================================================ */
+  function renderQueue() {
+    renderQueueBoard();
+    renderQueueTable();
+  }
+
+  function renderQueueBoard() {
+    const columns = [
+      { status: 'draft',          label: 'Draft',          cls: 'badge-gray' },
+      { status: 'pending_review', label: 'Pending Review', cls: 'badge-amber' },
+      { status: 'scheduled',      label: 'Scheduled',      cls: 'badge-purple' },
+      { status: 'publishing',     label: 'Publishing',     cls: 'badge-blue' },
+      { status: 'published',      label: 'Published',      cls: 'badge-green' },
+      { status: 'failed',         label: 'Failed',         cls: 'badge-red' }
+    ];
+
+    const board = document.getElementById('queue-board');
+    board.innerHTML = '';
+    board.style.gridTemplateColumns = 'repeat(3, 1fr)';
+
+    columns.forEach(function(col) {
+      const items = STATE.socialQueue.filter(function(q) { return q.status === col.status; });
+      const colEl = document.createElement('div');
+      colEl.className = 'sp-queue-column';
+      colEl.innerHTML =
+        '<div class="sp-queue-col-header">' +
+          '<div class="sp-queue-col-title">' + col.label + '</div>' +
+          '<div class="sp-queue-col-count">' + items.length + '</div>' +
+        '</div>' +
+        '<div class="sp-queue-items">' +
+        (items.length ? items.map(function(item) {
+          const acc = getAccountById(item.accountId);
+          return '<div class="sp-queue-item">' +
+            '<div class="sp-queue-item-title">' + item.title + '</div>' +
+            '<div class="sp-queue-item-meta">' +
+              '<span>' + acc.handle + '</span>' +
+              (item.scheduledFor ? '<span>' + formatDate(item.scheduledFor) + '</span>' : '') +
+            '</div>' +
+          '</div>';
+        }).join('') :
+        '<div class="os-empty" style="padding:var(--sp-lg)"><div class="os-empty-text">None</div></div>') +
+        '</div>';
+      board.appendChild(colEl);
+    });
+  }
+
+  function renderQueueTable() {
+    const tbody = document.getElementById('queue-table-body');
+    tbody.innerHTML = '';
+    STATE.socialQueue.forEach(function(item) {
+      const acc = getAccountById(item.accountId);
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><span style="font-size:13px;color:var(--os-light)">' + item.title + '</span></td>' +
+        '<td>' +
+          '<div class="os-flex" style="gap:6px">' +
+            '<span style="font-family:var(--font-utility);font-size:11px;color:var(--robin-blue-light)">' + acc.handle + '</span>' +
+          '</div>' +
+        '</td>' +
+        '<td><span class="os-badge ' + getStatusBadgeClass(item.status) + '">' + formatStatusLabel(item.status) + '</span></td>' +
+        '<td style="font-family:var(--font-utility);font-size:11px;color:var(--os-muted)">' + formatDate(item.scheduledFor) + '</td>' +
+        '<td>' +
+          '<div class="os-flex" style="gap:5px">' +
+            (item.status === 'draft' || item.status === 'pending_review' ?
+              '<button class="os-btn os-btn-ghost os-btn-sm" data-action="edit-queue" data-id="' + item.id + '">Edit</button>' : '') +
+            (item.status === 'failed' ?
+              '<button class="os-btn os-btn-ghost os-btn-sm" data-action="retry-queue" data-id="' + item.id + '">Retry</button>' : '') +
+          '</div>' +
+        '</td>';
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll('[data-action="retry-queue"]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const item = STATE.socialQueue.find(function(q) { return q.id === btn.dataset.id; });
+        if (item) {
+          item.status = 'pending_review';
+          renderQueue();
+          showToast('Item moved to Pending Review.', 'success');
+        }
+      });
+    });
+  }
+
+  function updateQueueTabCount() {
+    const pending = STATE.socialQueue.filter(function(q) {
+      return q.status === 'draft' || q.status === 'pending_review' || q.status === 'scheduled';
+    }).length;
+    document.getElementById('tab-count-queue').textContent = pending;
+  }
+
+  /* ================================================
+     RENDER — CALENDAR
+     ================================================ */
+  function renderCalendar() {
+    const today = new Date();
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - today.getDay() + STATE.calendarWeekOffset * 7);
+
+    /* Range label */
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    document.getElementById('cal-range').textContent =
+      weekStart.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' }) + ' – ' +
+      weekEnd.toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    const grid = document.getElementById('calendar-grid');
+    grid.innerHTML = '';
+
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    days.forEach(function(d) {
+      const h = document.createElement('div');
+      h.className = 'sp-cal-day-header';
+      h.textContent = d;
+      grid.appendChild(h);
+    });
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(weekStart);
+      day.setDate(weekStart.getDate() + i);
+      const isToday = day.toDateString() === today.toDateString();
+
+      const cell = document.createElement('div');
+      cell.className = 'sp-cal-day' + (isToday ? ' today' : '');
+
+      const num = document.createElement('div');
+      num.className = 'sp-cal-day-num';
+      num.textContent = day.getDate();
+      cell.appendChild(num);
+
+      /* Posts for this day */
+      const dayStr = day.toISOString().slice(0, 10);
+      const dayPosts = STATE.socialQueue.filter(function(q) {
+        if (!q.scheduledFor) return false;
+        return q.scheduledFor.slice(0, 10) === dayStr;
+      });
+      STATE.socialDrafts.forEach(function(d) {
+        if (d.createdAt && d.createdAt.slice(0, 10) === dayStr) {
+          dayPosts.push({ title: d.title, status: 'draft' });
+        }
+      });
+
+      dayPosts.forEach(function(post) {
+        const pill = document.createElement('div');
+        pill.className = 'sp-cal-post' + (post.status === 'draft' ? ' post-draft' : post.status === 'published' ? ' post-published' : '');
+        pill.textContent = post.title;
+        pill.title = post.title;
+        cell.appendChild(pill);
+      });
+
+      grid.appendChild(cell);
+    }
+  }
+
+  /* ================================================
+     RENDER — ANALYTICS
+     ================================================ */
+  function renderAnalytics() {
+    const el = document.getElementById('analytics-by-account');
+    el.innerHTML = '';
+    const maxPosts = 18;
+    STATE.socialAccounts.forEach(function(acc) {
+      const published = STATE.socialQueue.filter(function(q) { return q.accountId === acc.id && q.status === 'published'; }).length;
+      const pct = Math.round((published / Math.max(maxPosts, 1)) * 100);
+      const row = document.createElement('div');
+      row.className = 'sp-analytics-bar-row';
+      row.innerHTML =
+        '<div class="sp-analytics-bar-label">' + acc.name + '<br><span style="font-size:9px;color:var(--robin-blue-light)">' + acc.handle + '</span></div>' +
+        '<div class="sp-analytics-bar-track"><div class="sp-analytics-bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<div class="sp-analytics-bar-num">' + published + '</div>';
+      el.appendChild(row);
+    });
+  }
+
+  /* ================================================
+     OS LAYER — QUICK NAV (Dashboard buttons)
+     ================================================ */
+  function initDashboardNav() {
+    document.getElementById('btn-dash-compose').addEventListener('click', function() { activateTab('composer'); });
+    document.getElementById('btn-dash-queue').addEventListener('click', function() { activateTab('queue'); });
+    document.getElementById('btn-dash-calendar').addEventListener('click', function() { activateTab('calendar'); });
+  }
+
+  /* ================================================
+     OS LAYER — CALENDAR NAVIGATION
+     ================================================ */
+  function initCalendarNav() {
+    document.getElementById('cal-prev').addEventListener('click', function() {
+      STATE.calendarWeekOffset--;
+      renderCalendar();
+    });
+    document.getElementById('cal-next').addEventListener('click', function() {
+      STATE.calendarWeekOffset++;
+      renderCalendar();
+    });
+  }
+
+  /* ================================================
+     OS LAYER — FOOTER TIMESTAMP
+     ================================================ */
+  function initFooter() {
+    const d = new Date();
+    document.getElementById('footer-timestamp').textContent =
+      d.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  /* ================================================
+     OS LAYER — POPULATE ACCOUNT SELECTS IN MODALS
+     ================================================ */
+  function initAccountSelects() {
+    /* Tab counts */
+    document.getElementById('tab-count-accounts').textContent = STATE.socialAccounts.length;
+    updateQueueTabCount();
+  }
+
+  /* ================================================
+     BOOT — WBN Operating Platform™ v1.0
+     ================================================ */
+  function boot() {
+    initFooter();
+    initTabs();
+    initAdmin();
+    initModals();
+    initComposer();
+    initDashboardNav();
+    initCalendarNav();
+    initAccountSelects();
+    renderDashboard();
+    renderAccounts();
+    renderQueue();
+    renderCalendar();
+    showToast('WBN Social Publisher™ v0.1 ready.', 'success');
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
+
+})();
+</script>
+</body>
+</html>
